@@ -1,6 +1,6 @@
 # OLM Context Bundle
 
-**Version:** 1.0 — May 2026
+**Version:** 1.1 — May 2026
 **Public URL:** https://openlearningmap.org/ai/olm_context_bundle_latest.md
 **Repo:** https://github.com/Meta-Humans/olm
 
@@ -88,13 +88,13 @@ Use only these IDs. Any other ID is invalid.
 
 `constraint.time_limit`, `constraint.team_size`, `constraint.material_limit`, `constraint.safety_requirement`, `constraint.budget_cap`, `constraint.design_specification`, `constraint.tool_limit`, `constraint.self_direction`, `constraint.ruleset`
 
-### HDDs (8)
+### HDDs (11)
 
-`hdd.curiosity`, `hdd.belonging`, `hdd.agency`, `hdd.collaboration`, `hdd.sensemaking`, `hdd.persistence`, `hdd.self_trust`, `hdd.precision_orientation`
+`hdd.curiosity`, `hdd.belonging`, `hdd.agency`, `hdd.collaboration`, `hdd.sensemaking`, `hdd.persistence`, `hdd.self_trust`, `hdd.precision_orientation`, `hdd.collective_efficacy`, `hdd.intrinsic_motivation`, `hdd.psychological_safety`
 
 **Deprecated:** `hdd.self_direction` → use `hdd.self_trust`.
 
-**Pending (do not use):** `hdd.collective_efficacy`, `hdd.intrinsic_motivation`, `hdd.psychological_safety`. These are referenced in OLM documentation but have not yet been assigned canonical pipeline IDs.
+**Pending:** none currently.
 
 ---
 
@@ -340,4 +340,4 @@ A Playbook for this program would describe the typical culinary delivery model (
 
 *OLM is a project of Meta Humans. Submit programs, propose canonical elements, or report inconsistencies via openlearningmap.org/contribute or the OLM repo.*
 
-*Bundle version 1.0 — May 2026. Check `/ai/changelog.md` for revision history.*
+*Bundle version 1.1 — May 2026. Check `/ai/changelog.md` for revision history.*

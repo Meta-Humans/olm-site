@@ -13,6 +13,40 @@ When the canonical registry changes, all three files are republished together. U
 
 ---
 
+## v1.1 — May 2026
+
+**Registry revision: three HDDs promoted from pending to canonical.**
+
+### Registry counts after this revision
+- Patterns: 12
+- Routines: 21
+- Artifacts: 19
+- Evidence: 5
+- Constraints: 9
+- HDDs: **11** (was 8)
+
+### HDDs promoted to canonical
+
+- `hdd.collective_efficacy` — Cultural & Collective. The shared belief that a group can succeed together. Particularly relevant for multi-session projects, where collaboration accumulates across sessions and learners begin to act on a shared expectation of group capability. Project programs are the primary evidence base.
+- `hdd.intrinsic_motivation` — Dispositional. Engagement driven by internal interest, curiosity, or sense of purpose rather than external reward. Referenced in the HDD canonical document v0.1 and present across many programs as a design intent.
+- `hdd.psychological_safety` — Cultural & Collective. A felt sense that participants can speak, question, disagree, or risk an answer without social cost. Particularly relevant for discussion-heavy and question-board programs.
+
+All three were previously held in the `pending` block of the registry pending formal promotion. The `pending` block is now empty.
+
+### What this changes
+
+- These three IDs may now appear in `hdd_alignment` on any new or regenerated Core Mapping.
+- They follow the same non-claimable rules as all other HDDs — never scored, validated, or attached as outcomes.
+- Existing programs continue to validate as before; this is an additive change.
+
+### Files updated
+
+- `canonical_registry_latest.yaml`
+- `olm_system_prompt_latest.md`
+- `olm_context_bundle_latest.md`
+
+---
+
 ## v1.0 — May 2026
 
 **Initial public release of the AI files.**

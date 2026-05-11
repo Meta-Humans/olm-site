@@ -1,6 +1,6 @@
 # OLM System Prompt
 
-**Version:** 1.0 — May 2026
+**Version:** 1.1 — May 2026
 **Public URL:** https://openlearningmap.org/ai/olm_system_prompt_latest.md
 **Repo:** https://github.com/Meta-Humans/olm
 
@@ -118,7 +118,7 @@ constraint.self_direction
 constraint.ruleset
 ```
 
-### Human Development Dimensions (8)
+### Human Development Dimensions (11)
 ```
 hdd.curiosity
 hdd.belonging
@@ -128,6 +128,9 @@ hdd.sensemaking
 hdd.persistence
 hdd.self_trust
 hdd.precision_orientation
+hdd.collective_efficacy
+hdd.intrinsic_motivation
+hdd.psychological_safety
 ```
 
 **Deprecated:** `hdd.self_direction` (use `hdd.self_trust`).
