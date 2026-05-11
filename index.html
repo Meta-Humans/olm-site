@@ -3,86 +3,372 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Open Learning Map</title>
-  <meta name="description" content="Open Learning Map (OLM) is an early-stage project exploring clearer ways to describe and support learning without standardization." />
+  <title>Open Learning Map — A common language for learning</title>
+  <meta name="description" content="OLM is a structural framework that makes educational programs portable, inspectable, and reproducible — designed for both humans and AI systems." />
   <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
   <main class="container">
+
+    <!-- TOPBAR -->
     <div class="topbar">
       <a class="brand" href="/" aria-label="Open Learning Map">
         <img class="logo" src="assets/olm_logo.png" alt="olm — A common language for learning" />
       </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="#framework">Framework</a>
+        <a href="#programs">Programs</a>
+        <a href="#ai">AI</a>
+        <a href="#contribute">Contribute</a>
+        <a href="https://github.com/Meta-Humans/olm" target="_blank" rel="noopener" class="nav-github">GitHub ↗</a>
+      </nav>
     </div>
 
     <div class="page">
+
+      <!-- HERO -->
       <header class="header">
-        <h1 class="sr-only">Open Learning Map</h1>
-        <p class="tagline">
-          A simple public project to make learning easier to describe, share, and improve —
-          without forcing it into one model.
+        <p class="hero-problem">
+          Most educational programs live in a facilitator's head or a PDF no one reads.
+          When they scale — to new sites, new staff, new AI tools — they degrade.
         </p>
+        <p class="hero-answer">
+          OLM is a structural layer that makes programs <strong>portable</strong>, <strong>inspectable</strong>, and <strong>reproducible</strong> — without replacing the curriculum.
+        </p>
+        <div class="hero-ctas">
+          <a href="#framework" class="cta-primary">Browse the framework</a>
+          <a href="#programs" class="cta-secondary">See reference programs</a>
+          <a href="#contribute" class="cta-secondary">Contribute a program</a>
+        </div>
         <div class="badges">
-          <span class="badge">Early / in development</span>
-          <span class="badge">Public overview</span>
+          <span class="badge">v1.0 — May 2026</span>
+          <span class="badge">Open framework</span>
+          <span class="badge">Built by Meta Humans</span>
         </div>
       </header>
 
       <div class="content">
-        <section>
-          <h2>What it is</h2>
+
+        <!-- WHAT OLM IS -->
+        <section id="framework">
+          <h2>What OLM is</h2>
           <p>
-            Open Learning Map (OLM) is a lightweight way to talk about learning as it actually happens —
-            across different environments, people, and rhythms.
+            OLM is not a curriculum. It is a <strong>governed vocabulary and structural layer</strong> that any program can be expressed in — making the structure of learning inspectable alongside the content, without changing the content.
           </p>
           <p>
-            It is being developed as an open project, with clarity and usefulness as the primary goals.
+            Every program expressed in OLM consists of the same kinds of building blocks: routines (what learners do), artifacts (what they produce), evidence (what is observed), constraints (what limits the work), and patterns (named clusters of blocks that recur). A program is a specific, versioned composition of these blocks.
+          </p>
+
+          <h3>The layer model</h3>
+          <p>An OLM program packet has six layers. Each layer serves a distinct audience and is generated from the layers above it.</p>
+
+          <div class="layers">
+            <div class="layer layer-cm">
+              <div class="layer-label">Core Mapping</div>
+              <div class="layer-desc">The learning architecture — programs, patterns, routines, artifacts, evidence, constraints. Delivery-agnostic. This is what OLM governs.</div>
+            </div>
+            <div class="layer-arrow">↓</div>
+            <div class="layer layer-pb">
+              <div class="layer-label">Playbook</div>
+              <div class="layer-desc">How the program is typically delivered — pedagogy, group configuration, educator stance, adaptation rules.</div>
+            </div>
+            <div class="layer-arrow">↓</div>
+            <div class="layer layer-rb">
+              <div class="layer-label">Runbook</div>
+              <div class="layer-desc">The executable session flow — timed steps, facilitator actions, participant actions. Internal pipeline stage.</div>
+            </div>
+            <div class="layer-arrow">↓</div>
+            <div class="layer layer-eb">
+              <div class="layer-label">Educator Brief</div>
+              <div class="layer-desc">What educators see — preparation checklist, materials, session flow, key prompts, pitfalls. No OLM IDs.</div>
+            </div>
+            <div class="layer-arrow">↓</div>
+            <div class="layer layer-parent">
+              <div class="layer-label">Parent Brief</div>
+              <div class="layer-desc">What families see — accessible description, what kids will do, why it's valuable.</div>
+            </div>
+          </div>
+
+          <p class="small-note">
+            A hub buyer can inspect the Core Mapping. An educator reads the Educator Brief. A parent reads the Parent Brief. All three documents derive from the same structural source.
           </p>
         </section>
 
-        <section>
-          <h2>What it isn’t</h2>
-          <ul>
-            <li>Not a curriculum</li>
-            <li>Not a school replacement</li>
-            <li>Not a certification or credential</li>
-            <li>Not a rigid framework for ranking learners</li>
-          </ul>
-        </section>
-
-        <section>
-          <h2>Why it exists</h2>
+        <!-- BUILDING BLOCKS -->
+        <section id="blocks">
+          <h2>The canonical elements</h2>
           <p>
-            People often know when learning is working, but struggle to describe it clearly enough
-            to support it, repeat it, or collaborate around it.
+            OLM governs a registry of <strong>canonical elements</strong> — the only valid building blocks for any program mapping. No generated packet may reference an ID not in the registry. This is what makes OLM machine-readable and validator-enforced.
           </p>
-          <p>OLM exists to make that kind of clarity easier.</p>
-        </section>
 
-        <section>
-          <h2>Where it is today</h2>
-          <ul>
-            <li>A minimal public landing page</li>
-            <li>Ongoing work on language and practical artifacts</li>
-            <li>More public material as concepts stabilize</li>
-          </ul>
-        </section>
+          <div class="registry-stats">
+            <div class="stat"><span class="stat-n">12</span><span class="stat-label">Patterns</span></div>
+            <div class="stat"><span class="stat-n">21</span><span class="stat-label">Routines</span></div>
+            <div class="stat"><span class="stat-n">19</span><span class="stat-label">Artifacts</span></div>
+            <div class="stat"><span class="stat-n">5</span><span class="stat-label">Evidence types</span></div>
+            <div class="stat"><span class="stat-n">9</span><span class="stat-label">Constraints</span></div>
+            <div class="stat"><span class="stat-n">8</span><span class="stat-label">HDDs</span></div>
+          </div>
 
-        <section class="contact">
-          <h2>Contact</h2>
+          <div class="bricks-legend">
+            <span class="brick-chip bc-routine">Routines</span>
+            <span class="brick-chip bc-artifact">Artifacts</span>
+            <span class="brick-chip bc-evidence">Evidence</span>
+            <span class="brick-chip bc-constraint">Constraints</span>
+            <span class="brick-chip bc-pattern">Patterns</span>
+            <span class="brick-chip bc-hdd">HDDs</span>
+          </div>
+
+          <div class="bricks-sample">
+            <div class="brick-group">
+              <div class="brick-row">
+                <span class="brick bc-routine"><span class="studs"><i></i><i></i></span>noticing_wondering</span>
+                <span class="brick bc-routine"><span class="studs"><i></i><i></i></span>hands_on_activity</span>
+                <span class="brick bc-routine"><span class="studs"><i></i><i></i></span>reflect</span>
+                <span class="brick bc-routine"><span class="studs"><i></i><i></i></span>peer_feedback</span>
+                <span class="brick bc-routine"><span class="studs"><i></i><i></i></span>evidence_synthesis</span>
+              </div>
+              <div class="brick-row">
+                <span class="brick bc-artifact"><span class="studs"><i></i><i></i><i></i></span>reflection_log</span>
+                <span class="brick bc-artifact"><span class="studs"><i></i><i></i><i></i></span>kanban_board</span>
+                <span class="brick bc-artifact"><span class="studs"><i></i><i></i><i></i></span>scientific_model</span>
+                <span class="brick bc-artifact"><span class="studs"><i></i><i></i><i></i></span>cad_part_file</span>
+              </div>
+              <div class="brick-row">
+                <span class="brick bc-pattern"><span class="studs"><i></i><i></i><i></i><i></i></span>question_board</span>
+                <span class="brick bc-pattern"><span class="studs"><i></i><i></i><i></i><i></i></span>prototype_cycle</span>
+                <span class="brick bc-pattern"><span class="studs"><i></i><i></i><i></i><i></i></span>consensus_model</span>
+                <span class="brick bc-pattern"><span class="studs"><i></i><i></i><i></i><i></i></span>capstone_pitch</span>
+              </div>
+              <div class="brick-row">
+                <span class="brick bc-evidence"><span class="studs"><i></i></span>artifact_presence</span>
+                <span class="brick bc-evidence"><span class="studs"><i></i></span>numeric_match</span>
+                <span class="brick bc-constraint"><span class="studs"><i></i><i></i></span>time_limit</span>
+                <span class="brick bc-constraint"><span class="studs"><i></i><i></i></span>design_specification</span>
+                <span class="brick bc-hdd"><span class="studs"><i></i></span>curiosity</span>
+                <span class="brick bc-hdd"><span class="studs"><i></i></span>persistence</span>
+              </div>
+            </div>
+          </div>
+
           <p>
-            If you’re curious, want to follow progress, or have relevant experience, you can reach out:
-            <a href="mailto:hello@openlearningmap.org">hello@openlearningmap.org</a>
+            <a href="https://github.com/Meta-Humans/olm/blob/main/canonical/canonical_registry.yaml" target="_blank" rel="noopener">Browse the full canonical registry →</a>
           </p>
         </section>
-      </div>
+
+        <!-- REFERENCE PROGRAMS -->
+        <section id="programs">
+          <h2>Reference programs</h2>
+          <p>
+            Four programs mapped end-to-end — selected to show that OLM handles real variety across domain, age range, format, and authorship type.
+          </p>
+
+          <div class="program-grid">
+
+            <div class="program-card">
+              <div class="program-header">
+                <span class="program-domain domain-venture">Venture &amp; Making</span>
+                <span class="program-type">Authored</span>
+              </div>
+              <h3>Popcorn Factory</h3>
+              <p class="program-ages">Ages 7–17 · Week-long camp</p>
+              <p>Teams design, build, and pitch a popcorn product venture. The primary reference implementation — shows OLM from the ground up across a full week-long program.</p>
+              <div class="program-patterns">
+                <code>pattern.project_planning</code>
+                <code>pattern.prototype_cycle</code>
+                <code>pattern.capstone_pitch</code>
+              </div>
+              <a href="https://github.com/Meta-Humans/olm/tree/main/examples/popcorn_factory" class="program-link" target="_blank" rel="noopener">View mapping →</a>
+            </div>
+
+            <div class="program-card">
+              <div class="program-header">
+                <span class="program-domain domain-culinary">Culinary</span>
+                <span class="program-type">Authored</span>
+              </div>
+              <h3>Homemade Pizza</h3>
+              <p class="program-ages">All ages · 60-minute workshop</p>
+              <p>Learners explore the history of pizza, then make one. Demonstrates OLM at its simplest — a single-session program with one perishable artifact and a clean inquiry-to-application arc.</p>
+              <div class="program-patterns">
+                <code>routine.new_material</code>
+                <code>routine.hands_on_activity</code>
+                <code>artifact.physical_product</code>
+              </div>
+              <a href="https://github.com/Meta-Humans/olm/tree/main/examples/homemade_pizza" class="program-link" target="_blank" rel="noopener">View mapping →</a>
+            </div>
+
+            <div class="program-card">
+              <div class="program-header">
+                <span class="program-domain domain-technical">Technical / CAD</span>
+                <span class="program-type">Integrated</span>
+              </div>
+              <h3>CAD Missions</h3>
+              <p class="program-ages">Ages 7+ · Self-paced series</p>
+              <p>Mission-based 3D modeling using Onshape. Demonstrates OLM on an externally-authored program: one Core Mapping covers the full catalog. Surface-area verification produces the strongest evidence signal in the library.</p>
+              <div class="program-patterns">
+                <code>routine.apply_feature_with_parameters</code>
+                <code>routine.verify_with_measurement</code>
+                <code>evidence.numeric_match</code>
+              </div>
+              <a href="https://github.com/Meta-Humans/olm/tree/main/examples/cad_missions" class="program-link" target="_blank" rel="noopener">View mapping →</a>
+            </div>
+
+            <div class="program-card">
+              <div class="program-header">
+                <span class="program-domain domain-science">Science Inquiry</span>
+                <span class="program-type">Integrated — OpenSciEd</span>
+              </div>
+              <h3>OpenSciEd Unit 6.1 — Light &amp; Matter</h3>
+              <p class="program-ages">Ages 11–12 · 6-week unit</p>
+              <p>OLM as a translation layer over a widely-used NSF-funded curriculum. OpenSciEd's five "routines" become OLM patterns — naming the difference is what makes the translation possible.</p>
+              <div class="program-patterns">
+                <code>pattern.phenomenon_anchor</code>
+                <code>pattern.investigation_cycle</code>
+                <code>pattern.consensus_model</code>
+              </div>
+              <a href="https://github.com/Meta-Humans/olm/tree/main/examples/openscied_6_1" class="program-link" target="_blank" rel="noopener">View mapping →</a>
+            </div>
+
+          </div>
+
+          <div class="translation-callout">
+            <h3>What a translation looks like</h3>
+            <p class="small-note">OpenSciEd uses "routine" to mean "named instructional move." OLM uses "pattern" for the same idea. Naming the difference is what makes the translation possible.</p>
+            <table class="translation-table">
+              <thead>
+                <tr><th>OpenSciEd construct</th><th>OLM translation</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Anchoring Phenomenon Routine</td><td><code>pattern.phenomenon_anchor</code></td></tr>
+                <tr><td>Navigation Routine</td><td>Ritual — <em>Storyline Navigation</em> (no evidence produced)</td></tr>
+                <tr><td>Investigation Routine</td><td><code>pattern.investigation_cycle</code></td></tr>
+                <tr><td>Putting the Pieces Together Routine</td><td><code>pattern.consensus_model</code></td></tr>
+                <tr><td>Driving Question Board</td><td><code>artifact.question_set</code> (existing canonical ID)</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- OLM AND AI -->
+        <section id="ai">
+          <h2>OLM and AI systems</h2>
+          <p>
+            OLM is designed to be legible to both humans and AI systems. Most educational frameworks are too narrative or loosely defined to constrain an LLM. OLM's governed vocabulary and explicit layer rules eliminate the most common failure modes in AI-generated educational content: activities masquerading as programs, skills asserted without derivation, evidence claims without artifacts.
+          </p>
+          <p>
+            When a model operates within OLM, it cannot hallucinate structural relationships. <strong>The constraints become guardrails.</strong> This makes OLM a shared semantic layer between humans and AI tools working on the same content.
+          </p>
+
+          <div class="ai-resources">
+            <div class="ai-resource">
+              <div class="ai-resource-title">System prompt</div>
+              <div class="ai-resource-desc">Drop into Claude, ChatGPT, or any capable LLM to get OLM-aligned generation.</div>
+              <a href="/ai/olm_system_prompt_latest.md" class="ai-resource-link">Download olm_system_prompt_latest.md</a>
+            </div>
+            <div class="ai-resource">
+              <div class="ai-resource-title">Context bundle</div>
+              <div class="ai-resource-desc">Constitution, canonical registry, generation rules, and worked examples — everything an LLM needs in one fetch.</div>
+              <a href="/ai/olm_context_bundle_latest.md" class="ai-resource-link">Download olm_context_bundle_latest.md</a>
+            </div>
+            <div class="ai-resource">
+              <div class="ai-resource-title">Canonical registry</div>
+              <div class="ai-resource-desc">Machine-readable YAML. The authoritative source for ID validation — for humans, AI agents, and automated scripts.</div>
+              <a href="/ai/canonical_registry_latest.yaml" class="ai-resource-link">Download canonical_registry_latest.yaml</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- CONTRIBUTE -->
+        <section id="contribute">
+          <h2>Contribute</h2>
+          <p>
+            OLM grows through practitioners mapping the programs they actually run. The most valuable contribution is a Core Mapping — a structural description of a real program expressed in canonical OLM vocabulary.
+          </p>
+
+          <div class="contrib-paths">
+            <div class="contrib-path">
+              <div class="contrib-icon">①</div>
+              <div>
+                <strong>Map a program</strong>
+                <p>Submit a Core Mapping for a program you run. Paste your brief below to generate a draft — review it, correct any IDs, and submit. No GitHub account required.</p>
+              </div>
+            </div>
+            <div class="contrib-path">
+              <div class="contrib-icon">②</div>
+              <div>
+                <strong>Propose a canonical element</strong>
+                <p>If your program uses a routine, artifact, or evidence type with no existing canonical equivalent, propose it. Requires framework fluency and a justification for reusability.</p>
+              </div>
+            </div>
+            <div class="contrib-path">
+              <div class="contrib-icon">③</div>
+              <div>
+                <strong>Flag an error</strong>
+                <p>Open a GitHub issue. Lowest barrier, still valuable. Structural feedback helps the registry stay accurate.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="brief-generator">
+            <h3>Generate a Core Mapping draft</h3>
+            <p class="small-note">Paste a program brief and get a structured Core Mapping draft to review and submit. The script produces a draft — you review for accuracy, correct any mismatched IDs, and confirm the embedding mode before submitting.</p>
+            <textarea id="brief-input" rows="6" placeholder="Describe your program: what learners do, what they produce, how long it runs, who it's for..."></textarea>
+            <button id="generate-btn" onclick="generateMapping()">Generate Core Mapping draft ↗</button>
+            <div id="generate-output" class="generate-output" hidden></div>
+          </div>
+
+          <div class="community-block">
+            <h3>Community</h3>
+            <p>
+              OLM educators and hub operators discuss programs and framework questions in the
+              <a href="https://community.metahumans.com/c/olm" target="_blank" rel="noopener">Meta Humans community forum</a> under the OLM category.
+              Technical contributors work directly through the
+              <a href="https://github.com/Meta-Humans/olm" target="_blank" rel="noopener">GitHub repository</a>.
+            </p>
+          </div>
+        </section>
+
+      </div><!-- .content -->
 
       <footer class="footer">
-        <span>Built by the team behind <a href="https://www.metahumans.com" target="_blank" rel="noopener">Meta Humans</a>.</span>
-        <span class="footnote">OLM is early. Expect iterations.</span>
+        <span>Built by <a href="https://www.metahumans.com" target="_blank" rel="noopener">Meta Humans</a> · <a href="https://github.com/Meta-Humans/olm" target="_blank" rel="noopener">GitHub</a> · <a href="mailto:hello@openlearningmap.org">hello@openlearningmap.org</a></span>
+        <span class="footnote">OLM is a live project. The registry and reference programs evolve.</span>
       </footer>
-    </div>
+
+    </div><!-- .page -->
   </main>
+
+  <script>
+  async function generateMapping() {
+    const brief = document.getElementById('brief-input').value.trim();
+    if (!brief) return;
+    const btn = document.getElementById('generate-btn');
+    const out = document.getElementById('generate-output');
+    btn.disabled = true;
+    btn.textContent = 'Generating…';
+    out.hidden = false;
+    out.textContent = '';
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
+          system: `You are an OLM Core Mapping generator. Given a program brief, produce a YAML Core Mapping using only canonical OLM IDs. The canonical registry contains: patterns: opening, middle, closing, question_board, project_planning, design_review, prototype_cycle, capstone_pitch, retrospective, phenomenon_anchor, investigation_cycle, consensus_model. routines: noticing_wondering, question_generation, problem_interpretation, design_planning, new_material, discuss, hands_on_activity, model_construction, apply_cad_feature, explore_tool, apply_feature_with_parameters, iterate_for_precision, prototype_iteration, verify_with_measurement, compare_to_spec, kanban_workflow, peer_feedback, presentation_pitch, reflect, retrospective, evidence_synthesis. artifacts: prototype, physical_product, cad_part_file, measurement_log, design_brief, feedback_log, verification_record, retrospective_notes, question_set, team_canvas, kanban_board, reflection_log, pitch_deck, photo, video_clip, portfolio_entry, poster, presentation_recording, scientific_model. evidence: artifact_presence, rubric_observation, short_answer_reflection, routine_completion, numeric_match. constraints: time_limit, team_size, material_limit, safety_requirement, budget_cap, design_specification, tool_limit, self_direction, ruleset. hdds: curiosity, belonging, agency, collaboration, sensemaking, persistence, self_trust, precision_orientation. Output only valid YAML. Do not invent new IDs.`,
+          messages: [{ role: 'user', content: `Generate a Core Mapping draft for this program brief:\n\n${brief}` }]
+        })
+      });
+      const data = await res.json();
+      const text = data.content?.[0]?.text || 'No output.';
+      out.textContent = text;
+    } catch(e) {
+      out.textContent = 'Generation unavailable — paste your brief and email hello@openlearningmap.org to request a mapping.';
+    }
+    btn.disabled = false;
+    btn.textContent = 'Generate Core Mapping draft ↗';
+  }
+  </script>
 </body>
 </html>
