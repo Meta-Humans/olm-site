@@ -1,0 +1,117 @@
+# OLM Canonical Element Registry
+# Version: 1.1 — May 2026
+# Source of truth for all pipeline ID validation.
+# No generated packet may reference an ID not present in this file.
+#
+# This is the public AI-facing copy served at a stable URL.
+# Authoritative source: canonical/canonical_registry.yaml in the OLM repo.
+# Updates flow from the repo to this URL on each registry revision.
+#
+# Public URL: https://openlearningmap.org/ai/canonical_registry_latest.yaml
+# Repo: https://github.com/Meta-Humans/olm
+
+patterns:
+  - pattern.opening
+  - pattern.middle
+  - pattern.closing
+  - pattern.question_board
+  - pattern.project_planning
+  - pattern.design_review
+  - pattern.prototype_cycle
+  - pattern.capstone_pitch
+  - pattern.retrospective
+  - pattern.phenomenon_anchor
+  - pattern.investigation_cycle
+  - pattern.consensus_model
+
+routines:
+  - routine.noticing_wondering
+  - routine.question_generation
+  - routine.problem_interpretation
+  - routine.design_planning
+  - routine.new_material
+  - routine.discuss
+  - routine.hands_on_activity
+  - routine.model_construction
+  - routine.apply_cad_feature
+  - routine.explore_tool
+  - routine.apply_feature_with_parameters
+  - routine.iterate_for_precision
+  - routine.prototype_iteration
+  - routine.verify_with_measurement
+  - routine.compare_to_spec
+  - routine.kanban_workflow
+  - routine.peer_feedback
+  - routine.presentation_pitch
+  - routine.reflect
+  - routine.retrospective
+  - routine.evidence_synthesis
+
+artifacts:
+  - artifact.prototype
+  - artifact.physical_product
+  - artifact.cad_part_file
+  - artifact.measurement_log
+  - artifact.design_brief
+  - artifact.feedback_log
+  - artifact.verification_record
+  - artifact.retrospective_notes
+  - artifact.question_set
+  - artifact.team_canvas
+  - artifact.kanban_board
+  - artifact.reflection_log
+  - artifact.pitch_deck
+  - artifact.photo
+  - artifact.video_clip
+  - artifact.portfolio_entry
+  - artifact.poster
+  - artifact.presentation_recording
+  - artifact.scientific_model
+
+evidence:
+  - evidence.artifact_presence
+  - evidence.rubric_observation
+  - evidence.short_answer_reflection
+  - evidence.routine_completion
+  - evidence.numeric_match
+
+constraints:
+  - constraint.time_limit
+  - constraint.team_size
+  - constraint.material_limit
+  - constraint.safety_requirement
+  - constraint.budget_cap
+  - constraint.design_specification
+  - constraint.tool_limit
+  - constraint.self_direction
+  - constraint.ruleset
+
+hdds:
+  - hdd.curiosity
+  - hdd.belonging
+  - hdd.agency
+  - hdd.collaboration
+  - hdd.sensemaking
+  - hdd.persistence
+  - hdd.self_trust
+  - hdd.precision_orientation
+
+# Deprecated IDs — do not use in any new packet
+deprecated:
+  - hdd.self_direction  # replaced by hdd.self_trust
+
+# Pending registry additions — referenced in HDD document but not yet
+# assigned canonical IDs. Do not use in pipeline output.
+pending:
+  - hdd.collective_efficacy
+  - hdd.intrinsic_motivation
+  - hdd.psychological_safety
+
+# Registry counts (for validation cross-check)
+counts:
+  patterns: 12
+  routines: 21
+  artifacts: 19
+  evidence: 5
+  constraints: 9
+  hdds: 8
