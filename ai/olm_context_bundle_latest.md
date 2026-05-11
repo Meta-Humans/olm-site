@@ -1,6 +1,6 @@
 # OLM Context Bundle
 
-**Version:** 1.1 — May 2026
+**Version:** 1.2 — May 2026
 **Public URL:** https://openlearningmap.org/ai/olm_context_bundle_latest.md
 **Repo:** https://github.com/Meta-Humans/olm
 
@@ -88,13 +88,13 @@ Use only these IDs. Any other ID is invalid.
 
 `constraint.time_limit`, `constraint.team_size`, `constraint.material_limit`, `constraint.safety_requirement`, `constraint.budget_cap`, `constraint.design_specification`, `constraint.tool_limit`, `constraint.self_direction`, `constraint.ruleset`
 
-### HDDs (11)
+### HDDs (8)
 
-`hdd.curiosity`, `hdd.belonging`, `hdd.agency`, `hdd.collaboration`, `hdd.sensemaking`, `hdd.persistence`, `hdd.self_trust`, `hdd.precision_orientation`, `hdd.collective_efficacy`, `hdd.intrinsic_motivation`, `hdd.psychological_safety`
+`hdd.curiosity`, `hdd.belonging`, `hdd.agency`, `hdd.collaboration`, `hdd.sensemaking`, `hdd.persistence`, `hdd.self_trust`, `hdd.precision_orientation`
 
 **Deprecated:** `hdd.self_direction` → use `hdd.self_trust`.
 
-**Pending:** none currently.
+**Pending — do not use in generated content:** `hdd.collective_efficacy`, `hdd.intrinsic_motivation`, `hdd.psychological_safety`. These appear in the HDD framework document as recognized human capacities but are not yet assigned canonical pipeline IDs. If a brief describes one of these concepts, either map it to a related canonical HDD (`hdd.collaboration` is the closest approximation for collective efficacy; `hdd.curiosity` or `hdd.agency` for intrinsic motivation; `hdd.belonging` for psychological safety), or omit it from `hdd_alignment` and note the gap in a `notes` field.
 
 ---
 
@@ -228,6 +228,7 @@ A packet must pass these checks before being treated as valid.
 - All artifacts carry durability classification
 - If any artifact present, `evidence.artifact_presence` present
 - Deprecated IDs not used
+- Pending IDs not used
 
 ### Runbook (internal)
 - All routines exist in Core Mapping
@@ -340,4 +341,4 @@ A Playbook for this program would describe the typical culinary delivery model (
 
 *OLM is a project of Meta Humans. Submit programs, propose canonical elements, or report inconsistencies via openlearningmap.org/contribute or the OLM repo.*
 
-*Bundle version 1.1 — May 2026. Check `/ai/changelog.md` for revision history.*
+*Bundle version 1.2 — May 2026. Check `/ai/changelog.md` for revision history.*

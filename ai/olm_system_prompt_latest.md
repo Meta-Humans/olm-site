@@ -1,6 +1,6 @@
 # OLM System Prompt
 
-**Version:** 1.1 — May 2026
+**Version:** 1.2 — May 2026
 **Public URL:** https://openlearningmap.org/ai/olm_system_prompt_latest.md
 **Repo:** https://github.com/Meta-Humans/olm
 
@@ -118,7 +118,7 @@ constraint.self_direction
 constraint.ruleset
 ```
 
-### Human Development Dimensions (11)
+### Human Development Dimensions (8)
 ```
 hdd.curiosity
 hdd.belonging
@@ -128,12 +128,11 @@ hdd.sensemaking
 hdd.persistence
 hdd.self_trust
 hdd.precision_orientation
-hdd.collective_efficacy
-hdd.intrinsic_motivation
-hdd.psychological_safety
 ```
 
 **Deprecated:** `hdd.self_direction` (use `hdd.self_trust`).
+
+**Pending — do not use in generated content:** `hdd.collective_efficacy`, `hdd.intrinsic_motivation`, `hdd.psychological_safety`. These appear in the HDD framework document as recognized human capacities but are not yet assigned canonical pipeline IDs. If a brief describes one of these concepts, either map it to a related canonical HDD (`hdd.collaboration` is the closest approximation for collective efficacy; `hdd.curiosity` or `hdd.agency` for intrinsic motivation; `hdd.belonging` for psychological safety), or omit it from `hdd_alignment` and note the gap in a `notes` field.
 
 ---
 
@@ -193,6 +192,7 @@ Educators never see them as separate documents. They are generation stages that 
 - Every ID in any field must exist in the registry above.
 - No new IDs may be introduced.
 - Deprecated IDs must not be used.
+- Pending IDs must not be used.
 
 **Evidence:**
 - If any artifact is declared, `evidence.artifact_presence` must be included.

@@ -6,6 +6,57 @@
   <title>Open Learning Map — A common language for learning</title>
   <meta name="description" content="OLM is a structural framework that makes educational programs portable, inspectable, and reproducible — designed for both humans and AI systems." />
   <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Prompt builder — additions to styles.css */
+    #prompt-output {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.85em;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin-top: 0.75rem;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .prompt-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      align-items: center;
+    }
+    .prompt-launch {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.45rem 0.85rem;
+      border: 1px solid rgba(0,0,0,0.18);
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 0.9em;
+      color: inherit;
+      background: transparent;
+      line-height: 1;
+    }
+    .prompt-launch:hover {
+      background: rgba(0,0,0,0.04);
+    }
+    .prompt-steps {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 0.5rem;
+      font-size: 0.85em;
+      color: rgba(0,0,0,0.6);
+    }
+    .prompt-steps span { white-space: nowrap; }
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      border: 0;
+    }
+  </style>
 </head>
 
 <body>
@@ -290,8 +341,8 @@
             <div class="contrib-path">
               <div class="contrib-icon">①</div>
               <div>
-                <strong>Map a program</strong>
-                <p>Submit a Core Mapping for a program you run. Paste your brief below to generate a draft — review it, correct any IDs, and submit. No GitHub account required.</p>
+                <strong>Apply OLM to your program</strong>
+                <p>Paste your brief below to build a complete prompt — the canonical registry, layer rules, and your brief — ready to paste into Claude, ChatGPT, or any capable LLM. Your AI tool, your output, framework-compliant.</p>
               </div>
             </div>
             <div class="contrib-path">
@@ -311,11 +362,30 @@
           </div>
 
           <div class="brief-generator">
-            <h3>Generate a Core Mapping draft</h3>
-            <p class="small-note">Paste a program brief and get a structured Core Mapping draft to review and submit. The script produces a draft — you review for accuracy, correct any mismatched IDs, and confirm the embedding mode before submitting.</p>
-            <textarea id="brief-input" rows="6" placeholder="Describe your program: what learners do, what they produce, how long it runs, who it's for..."></textarea>
-            <button id="generate-btn" onclick="generateMapping()">Generate Core Mapping draft ↗</button>
-            <div id="generate-output" class="generate-output" hidden></div>
+            <h3>Generate a Core Mapping prompt</h3>
+            <p class="small-note">Paste a program brief and get a complete prompt — the canonical registry, layer rules, validation requirements, and your brief — ready to drop into Claude, ChatGPT, Gemini, or any capable LLM. Nothing leaves your browser.</p>
+
+            <label for="brief-input" class="sr-only">Program brief</label>
+            <textarea id="brief-input" rows="6" placeholder="Describe your program: what learners do, what they produce, how long it runs, who it's for…"></textarea>
+
+            <button id="build-btn" type="button" onclick="buildPrompt()">Build prompt</button>
+
+            <textarea id="prompt-output" rows="14" readonly hidden aria-label="Generated prompt"></textarea>
+
+            <div id="prompt-actions" class="prompt-actions" hidden>
+              <button id="copy-btn" type="button" onclick="copyPrompt()">Copy prompt</button>
+              <a href="https://claude.ai/new" target="_blank" rel="noopener" class="prompt-launch">Open Claude ↗</a>
+              <a href="https://chatgpt.com/" target="_blank" rel="noopener" class="prompt-launch">Open ChatGPT ↗</a>
+              <a href="https://gemini.google.com/app" target="_blank" rel="noopener" class="prompt-launch">Open Gemini ↗</a>
+            </div>
+
+            <div id="prompt-steps" class="prompt-steps" hidden>
+              <span>1. Copy prompt</span>
+              <span>2. Open your tool</span>
+              <span>3. Paste and run</span>
+            </div>
+
+            <p id="prompt-meta" class="small-note" hidden></p>
           </div>
 
           <div class="community-block">
@@ -340,35 +410,98 @@
   </main>
 
   <script>
-  async function generateMapping() {
-    const brief = document.getElementById('brief-input').value.trim();
-    if (!brief) return;
-    const btn = document.getElementById('generate-btn');
-    const out = document.getElementById('generate-output');
-    btn.disabled = true;
-    btn.textContent = 'Generating…';
-    out.hidden = false;
-    out.textContent = '';
-    try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
-          system: `You are an OLM Core Mapping generator. Given a program brief, produce a YAML Core Mapping using only canonical OLM IDs. The canonical registry contains: patterns: opening, middle, closing, question_board, project_planning, design_review, prototype_cycle, capstone_pitch, retrospective, phenomenon_anchor, investigation_cycle, consensus_model. routines: noticing_wondering, question_generation, problem_interpretation, design_planning, new_material, discuss, hands_on_activity, model_construction, apply_cad_feature, explore_tool, apply_feature_with_parameters, iterate_for_precision, prototype_iteration, verify_with_measurement, compare_to_spec, kanban_workflow, peer_feedback, presentation_pitch, reflect, retrospective, evidence_synthesis. artifacts: prototype, physical_product, cad_part_file, measurement_log, design_brief, feedback_log, verification_record, retrospective_notes, question_set, team_canvas, kanban_board, reflection_log, pitch_deck, photo, video_clip, portfolio_entry, poster, presentation_recording, scientific_model. evidence: artifact_presence, rubric_observation, short_answer_reflection, routine_completion, numeric_match. constraints: time_limit, team_size, material_limit, safety_requirement, budget_cap, design_specification, tool_limit, self_direction, ruleset. hdds: curiosity, belonging, agency, collaboration, sensemaking, persistence, self_trust, precision_orientation. Output only valid YAML. Do not invent new IDs.`,
-          messages: [{ role: 'user', content: `Generate a Core Mapping draft for this program brief:\n\n${brief}` }]
-        })
-      });
-      const data = await res.json();
-      const text = data.content?.[0]?.text || 'No output.';
-      out.textContent = text;
-    } catch(e) {
-      out.textContent = 'Generation unavailable — paste your brief and email hello@openlearningmap.org to request a mapping.';
+    // Prompt builder — assembles the OLM system prompt + a task wrapper + the user's brief.
+    // The system prompt is fetched once from /ai/olm_system_prompt_latest.md and cached.
+    // Nothing is sent to a server — the prompt is assembled entirely in the browser.
+    //
+    // Cache-busting: bump SYSTEM_PROMPT_VERSION when /ai/olm_system_prompt_latest.md changes.
+    // The browser caches per-URL; a new version parameter forces a fresh fetch automatically.
+
+    const SYSTEM_PROMPT_VERSION = '1.2';
+    const SYSTEM_PROMPT_URL = '/ai/olm_system_prompt_latest.md?v=' + SYSTEM_PROMPT_VERSION;
+
+    let cachedSystemPrompt = null;
+
+    const TASK_WRAPPER = [
+      '---',
+      '',
+      '# Task',
+      '',
+      'A program brief is provided below. Produce a **Core Mapping** for this program as YAML, following the registry, layer rules, and validation requirements above.',
+      '',
+      'Output only the YAML document. If a concept in the brief has no canonical equivalent, note the gap in a `notes` field rather than inventing an ID. Declare `embedding_mode`. Include durability classification for every artifact.',
+      '',
+      'When you are satisfied with the Core Mapping, you can optionally share it back to the OLM library by opening an issue at https://github.com/Meta-Humans/olm/issues/new with the YAML pasted in. Reviewers will validate and consider it for promotion to the canonical library.',
+      '',
+      '---',
+      '',
+      '# Program brief',
+      ''
+    ].join('\n');
+
+    async function buildPrompt() {
+      const brief = document.getElementById('brief-input').value.trim();
+      const btn   = document.getElementById('build-btn');
+      const out   = document.getElementById('prompt-output');
+      const acts  = document.getElementById('prompt-actions');
+      const steps = document.getElementById('prompt-steps');
+      const meta  = document.getElementById('prompt-meta');
+
+      if (!brief) {
+        meta.hidden = false;
+        meta.textContent = 'Add a program brief before building the prompt.';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Building…';
+
+      try {
+        if (!cachedSystemPrompt) {
+          const res = await fetch(SYSTEM_PROMPT_URL, { cache: 'force-cache' });
+          if (!res.ok) throw new Error('Could not load system prompt (HTTP ' + res.status + ').');
+          cachedSystemPrompt = await res.text();
+        }
+
+        const fullPrompt = cachedSystemPrompt.trim() + '\n\n' + TASK_WRAPPER + brief + '\n';
+
+        out.value  = fullPrompt;
+        out.hidden = false;
+        acts.hidden  = false;
+        steps.hidden = false;
+
+        const estTokens = Math.round(fullPrompt.length / 4);
+        meta.hidden = false;
+        meta.textContent = '~' + estTokens.toLocaleString() + ' tokens. Works best with Claude Sonnet, GPT-4o, or Gemini Pro. Nothing left your browser.';
+
+        btn.textContent = 'Rebuild prompt';
+      } catch (e) {
+        out.hidden  = true;
+        acts.hidden = true;
+        steps.hidden = true;
+        meta.hidden = false;
+        meta.textContent = 'Could not build the prompt: ' + e.message + ' You can still download the system prompt directly from the AI section above and paste it into your tool manually.';
+        btn.textContent = 'Build prompt';
+      } finally {
+        btn.disabled = false;
+      }
     }
-    btn.disabled = false;
-    btn.textContent = 'Generate Core Mapping draft ↗';
-  }
+
+    async function copyPrompt() {
+      const out = document.getElementById('prompt-output');
+      const btn = document.getElementById('copy-btn');
+      const original = btn.textContent;
+      try {
+        await navigator.clipboard.writeText(out.value);
+        btn.textContent = 'Copied ✓';
+      } catch (e) {
+        // Fallback for older browsers: select the text so the user can Cmd/Ctrl+C
+        out.focus();
+        out.select();
+        btn.textContent = 'Press Cmd/Ctrl+C';
+      }
+      setTimeout(function() { btn.textContent = original; }, 1800);
+    }
   </script>
 </body>
 </html>
