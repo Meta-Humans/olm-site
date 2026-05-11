@@ -24,6 +24,12 @@
       margin-top: 0.75rem;
       align-items: center;
     }
+    .build-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
     .prompt-launch {
       display: inline-flex;
       align-items: center;
@@ -362,13 +368,16 @@
           </div>
 
           <div class="brief-generator">
-            <h3>Generate a Core Mapping prompt</h3>
-            <p class="small-note">Paste a program brief and get a complete prompt — the canonical registry, layer rules, validation requirements, and your brief — ready to drop into Claude, ChatGPT, Gemini, or any capable LLM. Nothing leaves your browser.</p>
+            <h3>Build a prompt from your brief</h3>
+            <p class="small-note">Paste a program brief and get a complete prompt ready to drop into Claude, ChatGPT, Gemini, or any capable LLM. Choose <strong>Educator Brief</strong> for a facilitator-ready document, or <strong>OLM Mapping</strong> for a YAML Core Mapping to contribute back to the library. Nothing leaves your browser.</p>
 
             <label for="brief-input" class="sr-only">Program brief</label>
             <textarea id="brief-input" rows="6" placeholder="Describe your program: what learners do, what they produce, how long it runs, who it's for…"></textarea>
 
-            <button id="build-btn" type="button" onclick="buildPrompt()">Build prompt</button>
+            <div class="build-actions">
+              <button id="build-eb-btn" type="button" onclick="buildPrompt('educator_brief')">Build Educator Brief</button>
+              <button id="build-cm-btn" type="button" onclick="buildPrompt('core_mapping')">Build OLM Mapping</button>
+            </div>
 
             <textarea id="prompt-output" rows="14" readonly hidden aria-label="Generated prompt"></textarea>
 
@@ -414,6 +423,10 @@
     // The system prompt is fetched once from /ai/olm_system_prompt_latest.md and cached.
     // Nothing is sent to a server — the prompt is assembled entirely in the browser.
     //
+    // Two output modes:
+    //   educator_brief — facilitator-ready document, no canonical OLM tokens in output
+    //   core_mapping   — YAML Core Mapping for the OLM library, full canonical IDs
+    //
     // Cache-busting: bump SYSTEM_PROMPT_VERSION when /ai/olm_system_prompt_latest.md changes.
     // The browser caches per-URL; a new version parameter forces a fresh fetch automatically.
 
@@ -422,7 +435,7 @@
 
     let cachedSystemPrompt = null;
 
-    const TASK_WRAPPER = [
+    const TASK_WRAPPER_CORE_MAPPING = [
       '---',
       '',
       '# Task',
@@ -439,9 +452,63 @@
       ''
     ].join('\n');
 
-    async function buildPrompt() {
+    const TASK_WRAPPER_EDUCATOR_BRIEF = [
+      '---',
+      '',
+      '# Task',
+      '',
+      'A program brief is provided below. Produce a complete **Educator Brief** — the document a facilitator would use to walk in and run this program.',
+      '',
+      'Reason about the underlying program structure using the canonical registry, layer rules, and validation requirements above — which routines, artifacts, evidence, patterns, and constraints fit this brief — and use that reasoning to ensure the Educator Brief is internally consistent.',
+      '',
+      '**Do not surface any canonical OLM tokens in the output.** No `routine.*`, `artifact.*`, `pattern.*`, `evidence.*`, `constraint.*`, or `hdd.*` IDs anywhere in the document. The Educator Brief is read by practitioners — plain language only. No skill claims, no assessment language, no scoring guidance.',
+      '',
+      'Produce all 11 sections in this exact order:',
+      '',
+      '1. **Header** — program name, session length, age range',
+      '2. **Program Intent** — 1–3 plain-language sentences, non-claiming',
+      '3. **What to Expect** — non-chronological shape of the session (what the experience feels like, what the educator\'s role is)',
+      '4. **Before the Session** — preparation checklist',
+      '5. **Materials** — bulleted list',
+      '6. **Resources** — videos, worksheets, platforms, or tools the educator needs (with links if specified in the brief)',
+      '7. **Non-Negotiables** — rules or safety requirements that cannot be modified',
+      '8. **Key Prompts** — unordered list of facilitator prompts that anchor the experience',
+      '9. **Common Pitfalls** — what tends to go wrong and how to handle it',
+      '10. **Session Flow** — the only chronological section. Timed steps in order. Durations must sum exactly to the total program duration. Each step has a short title, a duration, and plain-language facilitator/participant guidance.',
+      '11. **Closing Checklist** — what the educator does after the session ends',
+      '',
+      'Output the Educator Brief as readable Markdown. No YAML.',
+      '',
+      'If the brief is missing information needed for any section (e.g., specific materials, exact duration), do not invent it — write "to be confirmed" or describe the gap in plain language.',
+      '',
+      '---',
+      '',
+      '# Program brief',
+      ''
+    ].join('\n');
+
+    const MODE_CONFIG = {
+      educator_brief: {
+        wrapper: TASK_WRAPPER_EDUCATOR_BRIEF,
+        label: 'Educator Brief',
+        btnId: 'build-eb-btn',
+        produces: 'a facilitator-ready document'
+      },
+      core_mapping: {
+        wrapper: TASK_WRAPPER_CORE_MAPPING,
+        label: 'OLM Mapping',
+        btnId: 'build-cm-btn',
+        produces: 'a YAML Core Mapping for the OLM library'
+      }
+    };
+
+    async function buildPrompt(mode) {
+      const cfg = MODE_CONFIG[mode];
+      if (!cfg) return;
+
       const brief = document.getElementById('brief-input').value.trim();
-      const btn   = document.getElementById('build-btn');
+      const ebBtn = document.getElementById('build-eb-btn');
+      const cmBtn = document.getElementById('build-cm-btn');
       const out   = document.getElementById('prompt-output');
       const acts  = document.getElementById('prompt-actions');
       const steps = document.getElementById('prompt-steps');
@@ -453,8 +520,11 @@
         return;
       }
 
-      btn.disabled = true;
-      btn.textContent = 'Building…';
+      const clickedBtn = document.getElementById(cfg.btnId);
+      const originalLabel = clickedBtn.textContent;
+      ebBtn.disabled = true;
+      cmBtn.disabled = true;
+      clickedBtn.textContent = 'Building…';
 
       try {
         if (!cachedSystemPrompt) {
@@ -463,7 +533,7 @@
           cachedSystemPrompt = await res.text();
         }
 
-        const fullPrompt = cachedSystemPrompt.trim() + '\n\n' + TASK_WRAPPER + brief + '\n';
+        const fullPrompt = cachedSystemPrompt.trim() + '\n\n' + cfg.wrapper + brief + '\n';
 
         out.value  = fullPrompt;
         out.hidden = false;
@@ -472,18 +542,17 @@
 
         const estTokens = Math.round(fullPrompt.length / 4);
         meta.hidden = false;
-        meta.textContent = '~' + estTokens.toLocaleString() + ' tokens. Works best with Claude Sonnet, GPT-4o, or Gemini Pro. Nothing left your browser.';
-
-        btn.textContent = 'Rebuild prompt';
+        meta.textContent = cfg.label + ' prompt — ~' + estTokens.toLocaleString() + ' tokens. Produces ' + cfg.produces + '. Works best with Claude Sonnet, GPT-4o, or Gemini Pro. Nothing left your browser.';
       } catch (e) {
         out.hidden  = true;
         acts.hidden = true;
         steps.hidden = true;
         meta.hidden = false;
         meta.textContent = 'Could not build the prompt: ' + e.message + ' You can still download the system prompt directly from the AI section above and paste it into your tool manually.';
-        btn.textContent = 'Build prompt';
       } finally {
-        btn.disabled = false;
+        ebBtn.disabled = false;
+        cmBtn.disabled = false;
+        clickedBtn.textContent = originalLabel;
       }
     }
 
