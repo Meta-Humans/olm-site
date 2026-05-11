@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OLM for AI tools — Open Learning Map</title>
+  <meta name="description" content="Downloadable OLM prompts and context bundle. Drop into any LLM to generate OLM-aligned learning programs." />
+  <meta property="og:title" content="OLM for AI tools" />
+  <meta property="og:description" content="Self-contained prompts and context for using Open Learning Map with any LLM." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://openlearningmap.org/ai/" />
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    /* /ai/ — additions to styles.css for this page only */
+    .file-meta {
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-family: "Courier New", monospace;
+      margin-top: 2px;
+    }
+    .file-meta .ver { color: var(--olm-teal-dark); font-weight: 500; }
+    .changelog-link {
+      margin-top: 14px;
+      font-size: 0.88rem;
+    }
+    .code-block {
+      background: #1c1f23;
+      color: #e8e6df;
+      padding: 16px 18px;
+      border-radius: var(--radius);
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: "Courier New", ui-monospace, Menlo, monospace;
+      font-size: 0.82rem;
+      line-height: 1.6;
+      margin: 14px 0 6px;
+    }
+    .code-block .c { color: #888780; }
+    .code-block .u { color: #5cd5e0; }
+    .inline-code {
+      font-family: "Courier New", ui-monospace, monospace;
+      font-size: 0.85em;
+      background: var(--accent-wash);
+      color: var(--olm-teal-dark);
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+    /* Pick callout reuses .translation-callout look but with our own list inside */
+    .pick-list { list-style: none; padding: 0; margin: 12px 0 0; }
+    .pick-list li {
+      padding: 8px 0;
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.55;
+      border-bottom: 1px solid var(--border);
+    }
+    .pick-list li:last-child { border-bottom: none; }
+    .pick-list strong {
+      font-family: "Courier New", monospace;
+      font-size: 0.84rem;
+      color: var(--text);
+      font-weight: 600;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <a class="brand" href="/" aria-label="Open Learning Map">
+        <img class="logo" src="../assets/olm_logo.png" alt="olm — A common language for learning" />
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="/#framework">Framework</a>
+        <a href="/#programs">Programs</a>
+        <a href="/#ai" aria-current="page">AI</a>
+        <a href="/#contribute">Contribute</a>
+        <a href="https://github.com/Meta-Humans/olm" target="_blank" rel="noopener" class="nav-github">GitHub ↗</a>
+      </nav>
+    </div>
+
+    <div class="page">
+
+      <!-- HERO -->
+      <header class="header">
+        <p class="hero-problem">
+          OLM is designed to be legible to both humans and AI systems. Most educational frameworks are too narrative or loosely defined to constrain an LLM — programs generated from them drift, invent structure, and assert outcomes they didn't earn.
+        </p>
+        <p class="hero-answer">
+          These four files give any LLM what it needs to produce content in OLM's canonical vocabulary — <strong>governed, validated, and self-contained</strong>. Drop one into Claude, ChatGPT, or any capable LLM. Nothing else needs to be fetched.
+        </p>
+        <div class="badges">
+          <span class="badge">Registry v1.2</span>
+          <span class="badge">12 patterns · 21 routines · 19 artifacts</span>
+          <span class="badge">5 evidence · 9 constraints · 8 HDDs</span>
+        </div>
+      </header>
+
+      <div class="content">
+
+        <!-- FILES -->
+        <section id="files">
+          <h2>Files</h2>
+          <p>
+            Three primary files plus a changelog. Each is a stable URL — the <span class="inline-code">_latest</span> suffix always points at the current revision. When the registry changes, all three files are republished together.
+          </p>
+
+          <div class="ai-resources">
+            <div class="ai-resource">
+              <div class="ai-resource-title">System prompt</div>
+              <div class="ai-resource-desc">
+                A self-contained prompt for interactive use. Drop into any LLM as a system message (or first user message in tools without a system role). Contains the full canonical registry, layer rules, validation constraints, and output shape.
+              </div>
+              <a href="olm_system_prompt_latest.md" class="ai-resource-link">Download olm_system_prompt_latest.md →</a>
+              <div class="file-meta"><span class="ver">v1.2</span> · markdown · ~10 KB</div>
+            </div>
+            <div class="ai-resource">
+              <div class="ai-resource-title">Context bundle</div>
+              <div class="ai-resource-desc">
+                The comprehensive one-fetch bundle. Constitution summary, full registry, layer contracts, generation and validation rules, and a worked example. For agents and tools that need to reason about OLM as well as generate from it.
+              </div>
+              <a href="olm_context_bundle_latest.md" class="ai-resource-link">Download olm_context_bundle_latest.md →</a>
+              <div class="file-meta"><span class="ver">v1.2</span> · markdown · ~17 KB</div>
+            </div>
+            <div class="ai-resource">
+              <div class="ai-resource-title">Canonical registry</div>
+              <div class="ai-resource-desc">
+                Machine-readable YAML. The authoritative list of valid OLM IDs — patterns, routines, artifacts, evidence, constraints, HDDs. For validators, automated scripts, and code that checks IDs against the registry.
+              </div>
+              <a href="canonical_registry_latest.yaml" class="ai-resource-link">Download canonical_registry_latest.yaml →</a>
+              <div class="file-meta"><span class="ver">v1.2</span> · yaml · ~3 KB</div>
+            </div>
+          </div>
+
+          <p class="changelog-link">
+            Version history: <a href="changelog.md">changelog.md →</a>
+          </p>
+
+          <div class="translation-callout">
+            <h3>Not sure which to pick?</h3>
+            <p class="small-note">Three files, three jobs. Most users want the first.</p>
+            <ul class="pick-list">
+              <li>
+                <strong>olm_system_prompt_latest.md</strong> — you're an educator or designer who wants to use Claude or ChatGPT to draft Core Mappings or Educator Briefs from program briefs.
+              </li>
+              <li>
+                <strong>olm_context_bundle_latest.md</strong> — you're building an agent, tool, or evaluation that needs to understand OLM, not just produce content in it.
+              </li>
+              <li>
+                <strong>canonical_registry_latest.yaml</strong> — you're writing code that validates OLM packets against the canonical vocabulary.
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- QUICK USAGE -->
+        <section id="usage">
+          <h2>Quick usage</h2>
+          <p>
+            The fastest path is to copy the system prompt into your LLM and send a program brief. Three steps.
+          </p>
+
+          <div class="contrib-paths">
+            <div class="contrib-path">
+              <div class="contrib-icon">①</div>
+              <div>
+                <strong>Copy the system prompt</strong>
+                <p>Open <span class="inline-code">olm_system_prompt_latest.md</span> and copy its contents into your LLM as a system message — or the first user message in tools without a system role.</p>
+              </div>
+            </div>
+            <div class="contrib-path">
+              <div class="contrib-icon">②</div>
+              <div>
+                <strong>Send a program brief</strong>
+                <p>Describe the learning experience you want to design — free text, no specific structure required. Duration, audience, what learners do and produce.</p>
+              </div>
+            </div>
+            <div class="contrib-path">
+              <div class="contrib-icon">③</div>
+              <div>
+                <strong>Get a Core Mapping</strong>
+                <p>The model returns a Core Mapping in OLM's canonical vocabulary, ready to feed into a Playbook stage or to validate against the registry. If a concept in your brief has no canonical equivalent, the model notes the gap rather than inventing an ID.</p>
+              </div>
+            </div>
+          </div>
+
+          <p class="small-note">
+            For an end-to-end interactive flow with brief input and prompt assembly, the <a href="/#contribute">prompt builder on the main page</a> wraps the system prompt with a task and your brief in one click.
+          </p>
+
+          <h3>Programmatic use</h3>
+          <p>For agents, pipelines, or scripts, fetch the files directly. URLs are stable.</p>
+
+<div class="code-block"><span class="c"># System prompt — interactive use, smallest footprint</span>
+curl <span class="u">https://openlearningmap.org/ai/olm_system_prompt_latest.md</span>
+
+<span class="c"># Context bundle — for agents and tools that reason about OLM</span>
+curl <span class="u">https://openlearningmap.org/ai/olm_context_bundle_latest.md</span>
+
+<span class="c"># Machine-readable registry — for validators and ID-checking code</span>
+curl <span class="u">https://openlearningmap.org/ai/canonical_registry_latest.yaml</span></div>
+
+          <p class="small-note">
+            The repository at <a href="https://github.com/Meta-Humans/olm" target="_blank" rel="noopener">Meta-Humans/olm</a> is the authoritative source. These files mirror <span class="inline-code">canonical/canonical_registry.yaml</span> and the AI assets on every release.
+          </p>
+        </section>
+
+        <!-- WHY THREE -->
+        <section id="why">
+          <h2>Why three files</h2>
+          <p>
+            OLM is a structural framework with a governed vocabulary. LLMs work well within it because the constraints are explicit — but only when the model can see the rules. The three primary files exist to give you three useful slices of the same source of truth.
+          </p>
+          <p>
+            The <strong>system prompt</strong> is the smallest workable unit. It contains the rules and registry an LLM needs to produce a Core Mapping or Playbook in canonical vocabulary, and nothing more. Use it for interactive work — pasting into a Claude or ChatGPT conversation.
+          </p>
+          <p>
+            The <strong>context bundle</strong> adds the constitution summary, the full layer contracts, and a worked example. It's larger, and it's the right choice when your tool or agent needs to reason about OLM rather than just generate within it. Evaluations, validators, and second-pass reviewers all benefit from the worked example.
+          </p>
+          <p>
+            The <strong>canonical registry YAML</strong> is the canonical list of valid IDs in a format your code can read. The repo's <span class="inline-code">canonical/canonical_registry.yaml</span> is the authoritative source; this file is its public mirror.
+          </p>
+        </section>
+
+      </div><!-- .content -->
+
+      <footer class="footer">
+        <span>Built by <a href="https://www.metahumans.com" target="_blank" rel="noopener">Meta Humans</a> · <a href="https://github.com/Meta-Humans/olm" target="_blank" rel="noopener">GitHub</a> · <a href="mailto:hello@openlearningmap.org">hello@openlearningmap.org</a></span>
+        <span class="footnote">OLM is a live project. The registry and reference programs evolve.</span>
+      </footer>
+
+    </div><!-- .page -->
+  </main>
+</body>
+</html>
