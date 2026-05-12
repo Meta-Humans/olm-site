@@ -351,7 +351,7 @@
               <div class="contrib-icon">①</div>
               <div>
                 <strong>Apply OLM to your program</strong>
-                <p>Paste your brief below to build a complete prompt — the canonical registry, layer rules, and your brief — ready to paste into Claude, ChatGPT, or any capable LLM. Your AI tool, your output, framework-compliant.</p>
+                <p>Paste your brief below to build a complete prompt — the canonical registry, layer rules, and your brief — ready to paste into Claude, ChatGPT, or any capable LLM. Generate a <strong>Core Mapping</strong> for the learning architecture, or a <strong>Playbook</strong> for the delivery model. Your AI tool, your output, framework-compliant.</p>
               </div>
             </div>
             <div class="contrib-path">
@@ -372,14 +372,14 @@
 
           <div class="brief-generator">
             <h3>Build a prompt from your brief</h3>
-            <p class="small-note">Paste a program brief and get a complete prompt ready to drop into Claude, ChatGPT, Gemini, or any capable LLM. Choose <strong>Educator Brief</strong> for a facilitator-ready document, or <strong>OLM Mapping</strong> for a YAML Core Mapping to contribute back to the library. Nothing leaves your browser.</p>
+            <p class="small-note">Paste a program brief and get a complete prompt ready to drop into Claude, ChatGPT, Gemini, or any capable LLM. Choose <strong>OLM Mapping</strong> for a YAML Core Mapping (the learning architecture), or <strong>OLM Playbook</strong> for a YAML Playbook (the delivery model). Both are valid contributions to the OLM library. Nothing leaves your browser.</p>
 
             <label for="brief-input" class="sr-only">Program brief</label>
             <textarea id="brief-input" rows="6" placeholder="Describe your program: what learners do, what they produce, how long it runs, who it's for…"></textarea>
 
             <div class="build-actions">
-              <button id="build-eb-btn" type="button" onclick="buildPrompt('educator_brief')">Build Educator Brief</button>
               <button id="build-cm-btn" type="button" onclick="buildPrompt('core_mapping')">Build OLM Mapping</button>
+              <button id="build-pb-btn" type="button" onclick="buildPrompt('playbook')">Build OLM Playbook</button>
             </div>
 
             <textarea id="prompt-output" rows="14" readonly hidden aria-label="Generated prompt"></textarea>
@@ -426,9 +426,9 @@
     // The system prompt is fetched once from /ai/olm_system_prompt_latest.md and cached.
     // Nothing is sent to a server — the prompt is assembled entirely in the browser.
     //
-    // Two output modes:
-    //   educator_brief — facilitator-ready document, no canonical OLM tokens in output
-    //   core_mapping   — YAML Core Mapping for the OLM library, full canonical IDs
+    // Two output modes — both within OLM framework scope:
+    //   core_mapping — YAML Core Mapping (learning architecture)
+    //   playbook     — YAML Playbook (delivery model)
     //
     // Cache-busting: bump SYSTEM_PROMPT_VERSION when /ai/olm_system_prompt_latest.md changes.
     // The browser caches per-URL; a new version parameter forces a fresh fetch automatically.
@@ -455,36 +455,56 @@
       ''
     ].join('\n');
 
-    const TASK_WRAPPER_EDUCATOR_BRIEF = [
+    const TASK_WRAPPER_PLAYBOOK = [
       '---',
       '',
       '# Task',
       '',
-      'A program brief is provided below. Produce a complete **Educator Brief** — the document a facilitator would use to walk in and run this program.',
+      'A program brief is provided below. Produce a **Playbook** for this program as YAML, following the registry, layer rules, and validation requirements above, plus the Playbook-specific rules in this task wrapper.',
       '',
-      'Reason about the underlying program structure using the canonical registry, layer rules, and validation requirements above — which routines, artifacts, evidence, patterns, and constraints fit this brief — and use that reasoning to ensure the Educator Brief is internally consistent.',
+      '## What a Playbook is',
       '',
-      '**Do not surface any canonical OLM tokens in the output.** No `routine.*`, `artifact.*`, `pattern.*`, `evidence.*`, `constraint.*`, or `hdd.*` IDs anywhere in the document. The Educator Brief is read by practitioners — plain language only. No skill claims, no assessment language, no scoring guidance.',
+      'A Playbook defines the **delivery model** for one or more programs that share a Core Mapping family. It describes how the program is typically delivered — pedagogy, group configuration, educator stance, materials, space setup, adaptation rules — without redefining the canonical routines, artifacts, or evidence declared in the Core Mapping.',
       '',
-      'Produce all 11 sections in this exact order:',
+      'A Playbook is not a session script. It is delivery-layer guidance that applies across many runs of the same program by different educators in different contexts.',
       '',
-      '1. **Header** — program name, session length, age range',
-      '2. **Program Intent** — 1–3 plain-language sentences, non-claiming',
-      '3. **What to Expect** — non-chronological shape of the session (what the experience feels like, what the educator\'s role is)',
-      '4. **Before the Session** — preparation checklist',
-      '5. **Materials** — bulleted list',
-      '6. **Resources** — videos, worksheets, platforms, or tools the educator needs (with links if specified in the brief)',
-      '7. **Non-Negotiables** — rules or safety requirements that cannot be modified',
-      '8. **Key Prompts** — unordered list of facilitator prompts that anchor the experience',
-      '9. **Common Pitfalls** — what tends to go wrong and how to handle it',
-      '10. **Session Flow** — the only chronological section. Timed steps in order. Durations must sum exactly to the total program duration. Each step has a short title, a duration, and plain-language facilitator/participant guidance.',
-      '11. **Closing Checklist** — what the educator does after the session ends',
+      '## Granularity rule',
       '',
-      'Output the Educator Brief as readable Markdown. No YAML.',
+      'One Playbook supports one delivery model. A single Playbook may support multiple related programs that share that delivery model (e.g., a culinary workshop Playbook may support Pizza, Sushi, and Cookie Decorating programs). Do not write a separate Playbook for each program if the delivery model is identical.',
       '',
-      '**Honor the brief\'s explicit constraints.** If the brief specifies session duration, group size, frequency, number of activities per slot, or any other structural parameter, build the Educator Brief at exactly that scale. Do not expand a short session into a longer one or add activities the brief did not request. A brief specifying a 10-minute single-activity slot becomes a ~10-minute Educator Brief with one activity, not a 40-minute multi-activity session. If the specified scale leaves a section thin, write it thin and note in a footnote what additional information would expand it.',
+      '## Required output fields',
       '',
-      'If the brief is missing information needed for any section (e.g., specific materials, exact duration), do not invent it — write "to be confirmed" or describe the gap in plain language.',
+      'Produce a YAML document with the following fields, in this order:',
+      '',
+      '- `playbook_id` — slug, lowercase, underscored, format: `playbook.snake_case_name`',
+      '- `title` — short descriptive title',
+      '- `program_id_supported` — one program ID or a list of program IDs from the same family',
+      '- `delivery_duration` — must match the Core Mapping `typical_duration` of the supported program(s)',
+      '- `provisional` — boolean. `true` if this is a draft for review; `false` only after acceptance into the canonical library',
+      '- `typical_flow` — 3 to 5 high-level phase descriptions. Each phase is a short prose description of what happens in that part of the delivery. NOT a step-by-step script. NOT timed minute-by-minute. NOT mapped one-to-one to routines.',
+      '- `roles_and_responsibilities` — object with two arrays:',
+      '    - `educator` — what the lead educator is responsible for',
+      '    - `guide` — what supporting staff (if any) are responsible for. Use an empty array `[]` if the program is single-educator.',
+      '- `materials_equipment` — bulleted list of physical or digital materials needed',
+      '- `space_setup` — short description of the space configuration',
+      '- `evidence_in_practice` — list of objects, one per artifact declared in the Core Mapping. Each object has:',
+      '    - `artifact_id` — must exactly match an artifact ID from the Core Mapping',
+      '    - `how_collected` — plain-language description of how the artifact is captured during delivery',
+      '- `observable_routines` — list of routine IDs from the Core Mapping that are visibly observable in delivery. Must be a subset of the routines declared in the Core Mapping. Do not add new routines.',
+      '- `rituals_referenced` — list of named OLM Ritual Library ritual names (e.g., Morning Circle, Closing Circle, Demo Day), or an empty array `[]`. Free-text descriptions of techniques are NOT valid entries.',
+      '- `adaptation_notes` — short prose on how the delivery adapts to common context variations (age range, group size, time constraints)',
+      '- `notes` — any framework gaps, ambiguities in the brief, or assumptions made',
+      '',
+      '## Strict rules',
+      '',
+      '- Do not redefine routines, artifacts, or evidence. Reference only what the Core Mapping declares.',
+      '- Do not invent canonical IDs not in the registry.',
+      '- Do not include timed steps, minute-by-minute timing, or scripted facilitator language. That is Runbook scope, not Playbook scope.',
+      '- Do not include rituals as free-text descriptions. Only named OLM Ritual Library entries.',
+      '- If the brief does not provide enough information for a field, write "to be confirmed" or note the gap in the `notes` field rather than inventing content.',
+      '- If the program does not have a Core Mapping yet, note that in the `notes` field and generate the Playbook against a plausible inferred Core Mapping, marking `provisional: true`.',
+      '',
+      'When you are satisfied with the Playbook, you can optionally share it back to the OLM library by opening an issue at https://github.com/Meta-Humans/olm/issues/new with the YAML pasted in. Submit Playbooks only when the delivery model is genuinely reusable by another organization without modification — org-specific Playbooks stay local.',
       '',
       '---',
       '',
@@ -493,17 +513,17 @@
     ].join('\n');
 
     const MODE_CONFIG = {
-      educator_brief: {
-        wrapper: TASK_WRAPPER_EDUCATOR_BRIEF,
-        label: 'Educator Brief',
-        btnId: 'build-eb-btn',
-        produces: 'a facilitator-ready document'
-      },
       core_mapping: {
         wrapper: TASK_WRAPPER_CORE_MAPPING,
         label: 'OLM Mapping',
         btnId: 'build-cm-btn',
         produces: 'a YAML Core Mapping for the OLM library'
+      },
+      playbook: {
+        wrapper: TASK_WRAPPER_PLAYBOOK,
+        label: 'OLM Playbook',
+        btnId: 'build-pb-btn',
+        produces: 'a YAML Playbook for the OLM library'
       }
     };
 
@@ -512,8 +532,8 @@
       if (!cfg) return;
 
       const brief = document.getElementById('brief-input').value.trim();
-      const ebBtn = document.getElementById('build-eb-btn');
       const cmBtn = document.getElementById('build-cm-btn');
+      const pbBtn = document.getElementById('build-pb-btn');
       const out   = document.getElementById('prompt-output');
       const acts  = document.getElementById('prompt-actions');
       const steps = document.getElementById('prompt-steps');
@@ -527,8 +547,8 @@
 
       const clickedBtn = document.getElementById(cfg.btnId);
       const originalLabel = clickedBtn.textContent;
-      ebBtn.disabled = true;
       cmBtn.disabled = true;
+      pbBtn.disabled = true;
       clickedBtn.textContent = 'Building…';
 
       try {
@@ -555,8 +575,8 @@
         meta.hidden = false;
         meta.textContent = 'Could not build the prompt: ' + e.message + ' You can still download the system prompt directly from the AI section above and paste it into your tool manually.';
       } finally {
-        ebBtn.disabled = false;
         cmBtn.disabled = false;
+        pbBtn.disabled = false;
         clickedBtn.textContent = originalLabel;
       }
     }
