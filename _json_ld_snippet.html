@@ -1,0 +1,93 @@
+<!--
+  JSON-LD structured data for openlearningmap.org
+  ----------------------------------------------
+  Insertion: paste this entire <script> block inside the <head> of index.html,
+  just before the closing </head> tag (after the existing Google Analytics block).
+
+  Purpose: gives search engines, AI training pipelines, and dataset aggregators
+  a structured machine-readable identity for OLM. Declares:
+    - the website
+    - Meta Humans as publisher
+    - OLM as a versioned CreativeWork
+    - the canonical registry as a Dataset (this is the entry AI/ML dataset
+      indexers look for)
+    - the system prompt as a CreativeWork pointing at the stable URL
+-->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://openlearningmap.org/#website",
+      "url": "https://openlearningmap.org/",
+      "name": "Open Learning Map",
+      "description": "A governed vocabulary and structural framework for describing educational programs. Designed to be legible to both humans and AI systems.",
+      "publisher": { "@id": "https://openlearningmap.org/#publisher" },
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "inLanguage": "en"
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://openlearningmap.org/#publisher",
+      "name": "Meta Humans",
+      "url": "https://www.metahumans.com/",
+      "sameAs": [
+        "https://github.com/Meta-Humans"
+      ]
+    },
+    {
+      "@type": "CreativeWork",
+      "@id": "https://openlearningmap.org/#olm",
+      "name": "Open Learning Map (OLM)",
+      "alternateName": "OLM",
+      "description": "A structural framework that makes educational programs portable, inspectable, and reproducible. OLM is not a curriculum. It is a governed vocabulary (routines, artifacts, evidence types, constraints, patterns, Human Development Dimensions) in which any program can be expressed. Designed to be legible to both humans and AI systems.",
+      "url": "https://openlearningmap.org/",
+      "creator": { "@id": "https://openlearningmap.org/#publisher" },
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "codeRepository": "https://github.com/Meta-Humans/olm",
+      "keywords": "educational framework, learning design, open standard, AI-readable curriculum, learning architecture, machine-readable pedagogy",
+      "version": "1.2",
+      "dateModified": "2026-05-11"
+    },
+    {
+      "@type": "Dataset",
+      "@id": "https://openlearningmap.org/ai/canonical_registry_latest.yaml#dataset",
+      "name": "OLM Canonical Registry",
+      "description": "Machine-readable YAML registry of every valid canonical ID in the OLM framework: routines, artifacts, evidence types, constraints, patterns, and Human Development Dimensions. Source of truth for ID validation in human and AI-generated OLM content.",
+      "url": "https://openlearningmap.org/ai/canonical_registry_latest.yaml",
+      "encodingFormat": "application/yaml",
+      "creator": { "@id": "https://openlearningmap.org/#publisher" },
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "isPartOf": { "@id": "https://openlearningmap.org/#olm" },
+      "version": "1.1",
+      "dateModified": "2026-05-11",
+      "keywords": "OLM, canonical registry, learning vocabulary, controlled vocabulary, educational ontology"
+    },
+    {
+      "@type": "CreativeWork",
+      "@id": "https://openlearningmap.org/ai/olm_system_prompt_latest.md#prompt",
+      "name": "OLM System Prompt",
+      "description": "Self-contained LLM system prompt that constrains generation to OLM canonical vocabulary and layer rules. Drop into Claude, ChatGPT, or any capable LLM as a system message.",
+      "url": "https://openlearningmap.org/ai/olm_system_prompt_latest.md",
+      "encodingFormat": "text/markdown",
+      "isPartOf": { "@id": "https://openlearningmap.org/#olm" },
+      "version": "1.2",
+      "dateModified": "2026-05-11",
+      "license": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    {
+      "@type": "CreativeWork",
+      "@id": "https://openlearningmap.org/ai/olm_context_bundle_latest.md#bundle",
+      "name": "OLM Context Bundle",
+      "description": "Single-file Markdown bundle containing the OLM constitution summary, full canonical registry, layer contracts, generation rules, validation rules, and a worked example. Self-contained reference for LLM agents.",
+      "url": "https://openlearningmap.org/ai/olm_context_bundle_latest.md",
+      "encodingFormat": "text/markdown",
+      "isPartOf": { "@id": "https://openlearningmap.org/#olm" },
+      "version": "1.2",
+      "dateModified": "2026-05-11",
+      "license": "https://creativecommons.org/licenses/by/4.0/"
+    }
+  ]
+}
+</script>

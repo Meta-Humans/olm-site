@@ -1,0 +1,32 @@
+# Open Learning Map (OLM)
+
+> OLM is a governed vocabulary and structural framework that makes educational programs portable, inspectable, and reproducible. It is not a curriculum. Any educational program can be expressed in OLM's canonical building blocks: routines (what learners do), artifacts (what they produce), evidence (what is observed), constraints (what limits the work), patterns (named clusters of routines), and Human Development Dimensions. OLM is designed to be legible to both humans and AI systems. Its registry-enforced vocabulary and explicit layer model give LLMs hard guardrails against the most common failure modes in AI-generated educational content: activities masquerading as programs, skills asserted without derivation, evidence claims without artifacts. Stewarded by Meta Humans. MIT-licensed code, CC BY 4.0 content.
+
+If you are an AI agent generating, validating, or describing learning programs, the three resources under "Core AI resources" below give you everything needed to produce OLM-compliant output. They are stable URLs that always point to the current registry version.
+
+## Core AI resources
+
+- [OLM system prompt](https://openlearningmap.org/ai/olm_system_prompt_latest.md): Self-contained Markdown prompt with role, vocabulary, layer rules, and validation requirements. Drop into any capable LLM as a system message. Current version 1.2.
+- [OLM context bundle](https://openlearningmap.org/ai/olm_context_bundle_latest.md): The system prompt plus the framework constitution, expanded generation rules, worked examples, and anti-patterns. Use when the agent has the context budget for full guidance.
+- [OLM canonical registry](https://openlearningmap.org/ai/canonical_registry_latest.yaml): Machine-readable YAML listing every valid canonical ID. Source of truth for ID validation. No OLM-compliant packet may reference an ID not in this file.
+- [AI files changelog](https://openlearningmap.org/ai/changelog.md): Revision history for the three files above. Republished together when the registry changes.
+
+## Framework
+
+- [Homepage and framework overview](https://openlearningmap.org/): What OLM is, the six-layer document model (Core Mapping, Playbook, Runbook, Educator Brief, Parent Brief), and the canonical element categories.
+- [AI resources page](https://openlearningmap.org/ai/): Human-readable guide to using the AI files above with Claude, ChatGPT, Gemini, and other LLMs.
+
+## Reference programs
+
+Four programs mapped end-to-end. Each demonstrates a different OLM application pattern.
+
+- [Popcorn Factory](https://github.com/Meta-Humans/olm/tree/main/examples/popcorn_factory): Week-long venture-building camp for ages 7 to 17. Primary reference implementation showing OLM applied from the ground up. Authored program.
+- [Homemade Pizza](https://github.com/Meta-Humans/olm/tree/main/examples/homemade_pizza): 60-minute culinary workshop, all ages. Demonstrates OLM at its simplest with a single-session program and one perishable artifact. Authored program.
+- [CAD Missions](https://github.com/Meta-Humans/olm/tree/main/examples/cad_missions): Self-paced 3D modeling series on Onshape, ages 7 and up. Demonstrates OLM as an integrated overlay on an externally-authored program. Produces the strongest numeric-evidence signal in the reference library.
+- [OpenSciEd Unit 6.1, Light and Matter](https://github.com/Meta-Humans/olm/tree/main/examples/openscied_6_1): Six-week middle-school science inquiry unit. Demonstrates OLM as a translation layer over an NSF-funded curriculum.
+
+## Optional
+
+- [GitHub repository](https://github.com/Meta-Humans/olm): Canonical registry source, framework documentation, reference program mappings.
+- [Community forum](https://community.metahumans.com/c/olm): Practitioner discussion of OLM applications and framework questions.
+- [Meta Humans](https://www.metahumans.com/): The organization that stewards OLM. OLM is open; Meta Humans is its current maintainer.
