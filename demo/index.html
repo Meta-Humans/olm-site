@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OLM Pipeline Demo | Open Learning Map</title>
+  <meta name="description" content="Watch the OLM pipeline turn a raw program brief into a Core Mapping, a Playbook, and an Educator Brief. Pre-generated demonstration with three real programs." />
+  <meta property="og:title" content="OLM Pipeline Demo" />
+  <meta property="og:description" content="From raw brief to educator-ready documents. See the OLM layer model in action." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://openlearningmap.org/demo/" />
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    /* ── /demo/ additions to styles.css for this page only ── */
+
+    .demo-note {
+      font-size: 0.82rem;
+      color: var(--muted);
+      background: var(--accent-wash);
+      border: 1px solid rgba(0,153,170,0.25);
+      border-radius: var(--radius);
+      padding: 10px 14px;
+      margin: 0 0 26px;
+    }
+
+    .step-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--olm-teal-dark);
+      margin: 0 0 10px;
+    }
+    .step-label::before {
+      content: "";
+      display: inline-block;
+      width: 18px; height: 2px;
+      background: var(--olm-teal);
+    }
+
+    /* Program picker */
+    .pick-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+    .pick-card {
+      text-align: left;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      cursor: pointer;
+      font: inherit;
+      color: inherit;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .pick-card:hover { border-color: var(--olm-teal); }
+    .pick-card[aria-pressed="true"] {
+      border-color: var(--olm-teal);
+      box-shadow: 0 0 0 2px var(--accent-wash), var(--shadow);
+    }
+    .pick-card h3 { margin: 0 0 4px; font-size: 0.95rem; }
+    .pick-card .pick-meta { font-size: 0.78rem; color: var(--muted); margin: 0; }
+    .pick-card .pick-domain {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--olm-teal-dark);
+      margin-bottom: 6px;
+    }
+
+    /* Brief panel */
+    .brief-panel {
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      background: var(--bg);
+      padding: 16px 18px;
+      margin-bottom: 8px;
+    }
+    .brief-panel pre {
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: "Courier New", ui-monospace, Menlo, monospace;
+      font-size: 0.82rem;
+      line-height: 1.6;
+      color: var(--text);
+    }
+    .brief-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 2px 10px;
+      margin-bottom: 10px;
+    }
+    .brief-hint { font-size: 0.8rem; color: var(--muted); font-style: italic; margin: 6px 0 26px; }
+
+    /* Run button */
+    .run-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 30px; }
+    .run-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: var(--olm-teal);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .run-btn:hover:not(:disabled) { background: var(--olm-teal-dark); }
+    .run-btn:disabled { opacity: 0.55; cursor: default; }
+    .run-hint { font-size: 0.8rem; color: var(--muted); }
+
+    /* Pipeline stages */
+    .pipeline {
+      display: none;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      padding: 18px 20px;
+      margin-bottom: 26px;
+    }
+    .pipeline.active { display: block; }
+    .stage {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      padding: 5px 0;
+      font-size: 0.85rem;
+      color: var(--muted);
+      opacity: 0.35;
+      transition: opacity 0.25s;
+    }
+    .stage.running, .stage.done { opacity: 1; }
+    .stage .stage-mark {
+      width: 16px;
+      flex: 0 0 16px;
+      text-align: center;
+      font-family: "Courier New", monospace;
+      color: var(--olm-teal-dark);
+    }
+    .stage.running .stage-mark::before { content: "▸"; animation: blink 0.9s step-end infinite; }
+    .stage.done .stage-mark::before { content: "✓"; }
+    .stage.done { color: var(--text); }
+    @keyframes blink { 50% { opacity: 0.2; } }
+
+    /* Brick assembly board */
+    .assembly {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      min-height: 36px;
+    }
+    .assembly .brick {
+      opacity: 0;
+      transform: translateY(-10px) scale(0.92);
+    }
+    .assembly .brick.snapped {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      transition: opacity 0.22s ease-out, transform 0.22s cubic-bezier(0.2, 0.9, 0.3, 1.3);
+    }
+
+    /* Output tabs */
+    .out { display: none; }
+    .out.active { display: block; }
+    .out-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 0;
+    }
+    .out-tab {
+      font: inherit;
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 9px 16px;
+      border: 1px solid var(--border);
+      border-bottom: none;
+      border-radius: 8px 8px 0 0;
+      background: var(--bg);
+      color: var(--muted);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .out-tab:disabled { opacity: 0.45; cursor: default; }
+    .out-tab[aria-selected="true"] {
+      background: var(--surface);
+      color: var(--text);
+      border-color: var(--olm-teal);
+      border-bottom: 2px solid var(--surface);
+      margin-bottom: -1px;
+    }
+    .out-tab .tab-check { color: var(--olm-teal-dark); margin-left: 6px; }
+    .out-body {
+      border: 1px solid var(--border);
+      border-radius: 0 var(--radius) var(--radius) var(--radius);
+      background: var(--surface);
+      overflow: hidden;
+    }
+    .out-pane { display: none; }
+    .out-pane.active { display: block; }
+
+    .yaml-block {
+      background: #1c1f23;
+      color: #e8e6df;
+      padding: 18px 20px;
+      overflow-x: auto;
+      white-space: pre;
+      font-family: "Courier New", ui-monospace, Menlo, monospace;
+      font-size: 0.8rem;
+      line-height: 1.6;
+      margin: 0;
+      min-height: 200px;
+      max-height: 480px;
+      overflow-y: auto;
+    }
+    .yaml-block .yk { color: #5cd5e0; }
+    .yaml-block .yc { color: #888780; }
+
+    /* Educator Brief rendered preview */
+    .ebrief {
+      padding: 26px 30px 30px;
+      max-height: 520px;
+      overflow-y: auto;
+    }
+    .ebrief .eb-doc-tag {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--olm-teal-dark);
+      margin: 0 0 4px;
+    }
+    .ebrief h3.eb-title { margin: 0 0 2px; font-size: 1.15rem; }
+    .ebrief .eb-meta { font-size: 0.8rem; color: var(--muted); margin: 0 0 18px; }
+    .ebrief h4 {
+      margin: 18px 0 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 4px;
+    }
+    .ebrief p, .ebrief li { font-size: 0.85rem; color: var(--muted); margin: 0 0 8px; }
+    .ebrief ul { margin: 0 0 8px; padding-left: 20px; }
+    .ebrief li { margin-bottom: 4px; }
+    .eb-note { font-size: 0.78rem; font-style: italic; }
+
+    .restart-row { margin-top: 18px; }
+    .restart-btn {
+      font: inherit;
+      font-size: 0.85rem;
+      padding: 8px 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .restart-btn:hover { background: var(--bg); color: var(--text); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .assembly .brick, .assembly .brick.snapped { transition: none; }
+      .stage { transition: none; }
+      .stage.running .stage-mark::before { animation: none; }
+    }
+  </style>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q7HHX62PSZ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-Q7HHX62PSZ');
+  </script>
+</head>
+
+<body>
+  <main class="container">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <a class="brand" href="/" aria-label="Open Learning Map">
+        <img class="logo" src="../assets/olm_logo.png" alt="olm: A common language for learning" />
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="/#framework">Framework</a>
+        <a href="/#programs">Programs</a>
+        <a href="/demo/" aria-current="page">Demo</a>
+        <a href="/#ai">AI</a>
+        <a href="/#contribute">Contribute</a>
+        <a href="https://github.com/Meta-Humans/olm" target="_blank" rel="noopener" class="nav-github">GitHub ↗</a>
+      </nav>
+    </div>
+
+    <div class="page">
+
+      <!-- HERO -->
+      <header class="header">
+        <p class="hero-problem">
+          Most learning programs never make it past the brief that describes them.
+        </p>
+        <p class="hero-answer">
+          Watch the OLM pipeline turn a raw brief into a <strong>Core Mapping</strong>, a <strong>Playbook</strong>, and an <strong>Educator Brief</strong>: the same program, written for three different readers.
+        </p>
+      </header>
+
+      <div class="content">
+
+        <p class="demo-note">
+          <strong>Everything below is pre-generated.</strong> The documents are real outputs of the OLM pipeline, validated against canonical registry v1.1. The animation replays the generation stages. Nothing is sent anywhere and no AI runs in your browser. To generate documents for your own program, use the <a href="/#contribute">prompt builder</a>.
+        </p>
+
+        <!-- STEP 1 -->
+        <section aria-labelledby="step1">
+          <p class="step-label" id="step1">Step 1: Choose a program</p>
+          <div class="pick-grid" id="pick-grid" role="group" aria-label="Choose a demo program">
+            <button class="pick-card" type="button" data-program="pizza" aria-pressed="false">
+              <span class="pick-domain">Culinary</span>
+              <h3>Homemade Pizza</h3>
+              <p class="pick-meta">All ages · 60-minute workshop</p>
+            </button>
+            <button class="pick-card" type="button" data-program="cad" aria-pressed="false">
+              <span class="pick-domain">Technical / CAD</span>
+              <h3>CAD Missions</h3>
+              <p class="pick-meta">Ages 7+ · Self-paced series</p>
+            </button>
+            <button class="pick-card" type="button" data-program="popcorn" aria-pressed="false">
+              <span class="pick-domain">Venture &amp; Making</span>
+              <h3>Popcorn Factory</h3>
+              <p class="pick-meta">Ages 7–17 · Week-long camp</p>
+            </button>
+          </div>
+        </section>
+
+        <!-- STEP 2 -->
+        <section aria-labelledby="step2" id="step2-section" hidden>
+          <p class="step-label" id="step2">Step 2: The raw brief</p>
+          <div class="brief-panel">
+            <span class="brief-tag">Program brief, as an educator would write it</span>
+            <pre id="brief-text"></pre>
+          </div>
+          <p class="brief-hint">The brief is fixed in this demo. In real use, this is the only thing a program author writes by hand.</p>
+
+          <div class="run-row">
+            <button class="run-btn" id="run-btn" type="button">Run the OLM pipeline</button>
+            <span class="run-hint">~15 seconds · replays the real generation stages</span>
+          </div>
+        </section>
+
+        <!-- PIPELINE -->
+        <section aria-labelledby="step3" id="pipeline-section" hidden>
+          <p class="step-label" id="step3">Step 3: The pipeline</p>
+          <div class="pipeline" id="pipeline" aria-live="polite">
+            <div class="stage" data-stage="0"><span class="stage-mark"></span><span>Reading program brief</span></div>
+            <div class="stage" data-stage="1"><span class="stage-mark"></span><span>Validating vocabulary against canonical registry v1.1</span></div>
+            <div class="stage" data-stage="2"><span class="stage-mark"></span><span>Composing Core Mapping: selecting canonical elements</span></div>
+            <div class="stage" data-stage="3"><span class="stage-mark"></span><span>Core Mapping complete</span></div>
+            <div class="stage" data-stage="4"><span class="stage-mark"></span><span>Deriving Playbook: the delivery model</span></div>
+            <div class="stage" data-stage="5"><span class="stage-mark"></span><span>Playbook complete</span></div>
+            <div class="stage" data-stage="6"><span class="stage-mark"></span><span>Compiling Educator Brief: the document staff read</span></div>
+            <div class="stage" data-stage="7"><span class="stage-mark"></span><span>Packet ready</span></div>
+            <div class="assembly" id="assembly" aria-hidden="true"></div>
+          </div>
+        </section>
+
+        <!-- OUTPUT -->
+        <section aria-labelledby="step4" id="out-section" hidden>
+          <p class="step-label" id="step4">Step 4: Same program, three altitudes</p>
+          <div class="out active" id="out">
+            <div class="out-tabs" role="tablist" aria-label="Generated documents">
+              <button class="out-tab" id="tab-cm" role="tab" aria-selected="false" aria-controls="pane-cm" disabled>Core Mapping <span class="tab-check" hidden>✓</span></button>
+              <button class="out-tab" id="tab-pb" role="tab" aria-selected="false" aria-controls="pane-pb" disabled>Playbook <span class="tab-check" hidden>✓</span></button>
+              <button class="out-tab" id="tab-eb" role="tab" aria-selected="false" aria-controls="pane-eb" disabled>Educator Brief <span class="tab-check" hidden>✓</span></button>
+            </div>
+            <div class="out-body">
+              <div class="out-pane" id="pane-cm" role="tabpanel" aria-labelledby="tab-cm">
+                <pre class="yaml-block" id="yaml-cm"></pre>
+              </div>
+              <div class="out-pane" id="pane-pb" role="tabpanel" aria-labelledby="tab-pb">
+                <pre class="yaml-block" id="yaml-pb"></pre>
+              </div>
+              <div class="out-pane" id="pane-eb" role="tabpanel" aria-labelledby="tab-eb">
+                <div class="ebrief" id="ebrief"></div>
+              </div>
+            </div>
+            <p class="small-note" style="margin-top: 12px;">
+              The Core Mapping is the part OLM governs: pure structure, machine validated. The Playbook is the delivery model. The Educator Brief is the only document staff read: plain language, no OLM IDs. A Parent Brief follows the same cascade.
+            </p>
+            <div class="restart-row">
+              <button class="restart-btn" id="restart-btn" type="button">Try another program</button>
+            </div>
+          </div>
+        </section>
+
+      </div><!-- .content -->
+
+      <footer class="footer">
+        <span>Built by <a href="https://www.metahumans.com" target="_blank" rel="noopener">Meta Humans</a> · <a href="https://github.com/Meta-Humans/olm" target="_blank" rel="noopener">GitHub</a> · <a href="mailto:hello@openlearningmap.org">hello@openlearningmap.org</a></span>
+        <span class="footnote">Demo documents are validated against canonical registry v1.1 and may be inspected in the <a href="https://github.com/Meta-Humans/olm" target="_blank" rel="noopener">OLM repository</a>.</span>
+      </footer>
+
+    </div><!-- .page -->
+  </main>
+
+  <script>
+    // ──────────────────────────────────────────────────────────────
+    // OLM Pipeline Demo. Replay, not live generation.
+    // All documents are pre-generated outputs of the OLM pipeline,
+    // validated against canonical registry v1.1. The animation
+    // replays the stages; nothing leaves the browser.
+    // ──────────────────────────────────────────────────────────────
+
+    const PROGRAMS = {
+
+      pizza: {
+        brief: `Homemade Pizza. 60-minute workshop, all ages (7+).
+
+Learners explore where pizza comes from (flatbreads, Naples, how it
+traveled the world), then make their own personal pizza from prepared
+dough: shaping, sauce, toppings, and bake. While pizzas bake, the group
+shares what they noticed about how the dough behaved. Everyone eats or
+takes home their pizza and we photograph each one before it disappears.
+
+One educator, up to 12 learners. Oven safety rules apply. Toppings are
+limited to what is prepped that day.`,
+        bricks: [
+          ["pattern.opening","bc-pattern"],["pattern.middle","bc-pattern"],["pattern.closing","bc-pattern"],
+          ["routine.new_material","bc-routine"],["routine.noticing_wondering","bc-routine"],
+          ["routine.hands_on_activity","bc-routine"],["routine.discuss","bc-routine"],["routine.reflect","bc-routine"],
+          ["artifact.physical_product","bc-artifact"],["artifact.photo","bc-artifact"],
+          ["evidence.artifact_presence","bc-evidence"],["evidence.short_answer_reflection","bc-evidence"],
+          ["constraint.time_limit","bc-constraint"],["constraint.safety_requirement","bc-constraint"],
+          ["constraint.material_limit","bc-constraint"],
+          ["hdd.curiosity","bc-hdd"],["hdd.sensemaking","bc-hdd"]
+        ],
+        coreMapping: `# Core Mapping generated by the OLM pipeline
+# Validated against canonical registry v1.1
+
+program_id: program.homemade_pizza
+title: Homemade Pizza
+embedding_mode: standalone
+duration: 60 minutes
+age_range: 7+
+program_intent: >
+  Learners trace the history of pizza from flatbread to global food,
+  then apply that context by shaping, topping, and baking a personal
+  pizza. A single-session arc from inquiry to tangible product.
+
+patterns:
+  - pattern.opening
+  - pattern.middle
+  - pattern.closing
+
+routines:
+  - routine.new_material        # pizza history and dough science
+  - routine.noticing_wondering  # how does dough behave?
+  - routine.hands_on_activity   # shape, sauce, top, bake
+  - routine.discuss             # share observations while baking
+  - routine.reflect             # closing reflection
+
+artifacts:
+  - id: artifact.physical_product
+    durability: perishable      # it gets eaten
+  - id: artifact.photo
+    durability: durable         # the record that remains
+
+evidence:
+  - evidence.artifact_presence
+  - evidence.short_answer_reflection
+
+constraints:
+  - constraint.time_limit          # 60 minutes, oven schedule fixed
+  - constraint.safety_requirement  # oven and food handling rules
+  - constraint.material_limit      # prepped toppings only
+
+hdd_alignment:   # design intent only, never claimed as outcomes
+  - hdd.curiosity
+  - hdd.sensemaking
+
+notes: >
+  The perishable primary artifact is the canonical example of why
+  durability classification exists: the photo carries the evidence
+  after the pizza is gone.`,
+        playbook: `# Playbook generated by the OLM pipeline
+# Delivery model. References the Core Mapping; redefines nothing.
+
+playbook_id: playbook.single_session_culinary
+title: Single-Session Culinary Workshop
+program_id_supported: program.homemade_pizza
+delivery_duration: 60 minutes
+provisional: false
+
+typical_flow:
+  - Welcome and a short story-driven introduction to the dish and
+    where it comes from, with the group seated together.
+  - Hands-on preparation at stations, with each learner working on
+    their own product while the educator circulates.
+  - Bake window doubles as group discussion time, surfacing what
+    learners noticed about materials and process.
+  - Closing tasting, photographs of each product, and a short
+    reflection round before cleanup.
+
+roles_and_responsibilities:
+  educator:
+    - Frame the opening story and demonstrate each preparation step
+    - Enforce oven and food-safety rules at all times
+    - Capture a photo of every finished product
+    - Prompt and collect the closing reflections
+  guide: []   # single-educator program
+
+materials_equipment:
+  - Prepared dough portions (one per learner)
+  - Sauce, cheese, and prepped toppings
+  - Oven or countertop pizza ovens
+  - Food-safe gloves, sanitizer, paper boats
+
+space_setup: >
+  Stations around a central demo table, oven zone physically
+  separated and educator-only.
+
+evidence_in_practice:
+  - artifact_id: artifact.physical_product
+    how_collected: Exists at session end; eaten or taken home.
+  - artifact_id: artifact.photo
+    how_collected: Educator photographs each pizza before tasting.
+
+observable_routines:
+  - routine.hands_on_activity
+  - routine.discuss
+  - routine.reflect
+
+rituals_referenced:
+  - Closing Circle
+
+adaptation_notes: >
+  Scales 6 to 12 learners per educator. For younger groups,
+  pre-portion toppings; for older groups, extend the dough science
+  discussion during the bake window.
+
+notes: >
+  Reusable across culinary single-session programs with the same
+  delivery shape.`,
+        ebrief: `
+          <p class="eb-doc-tag">Educator Brief</p>
+          <h3 class="eb-title">Homemade Pizza</h3>
+          <p class="eb-meta">60-minute workshop · All ages 7+ · 1 educator, up to 12 learners</p>
+
+          <h4>What to Expect</h4>
+          <p>A fast single session. Learners hear a short history of pizza, make their own from prepared dough, and reflect while it bakes. Expect the energy to peak at the topping stage.</p>
+
+          <h4>Before the Session</h4>
+          <ul>
+            <li>Portion dough: one ball per learner, room temperature</li>
+            <li>Prep topping bowls and label them</li>
+            <li>Preheat ovens 20 minutes before start</li>
+            <li>Check allergy notes for the roster</li>
+          </ul>
+
+          <h4>Materials</h4>
+          <ul>
+            <li>Dough portions, sauce, cheese, prepped toppings</li>
+            <li>Food-safe gloves, sanitizer, paper boats</li>
+            <li>Camera or phone for product photos</li>
+          </ul>
+
+          <h4>Key Prompts</h4>
+          <ul>
+            <li>"What did the dough do that you didn't expect?"</li>
+            <li>"Why do you think pizza spread around the world?"</li>
+            <li>"What would you change about yours next time?"</li>
+          </ul>
+
+          <h4>Common Pitfalls</h4>
+          <ul>
+            <li>Letting the history segment run long. Cap it at 10 minutes.</li>
+            <li>Overloaded pizzas that won't cook through. Coach restraint at the topping table.</li>
+            <li>Forgetting photos before tasting. The photo is the only record once the pizza is eaten.</li>
+          </ul>
+
+          <h4>End of Session</h4>
+          <p>Closing circle while eating: one sentence each on what they noticed. Photograph every pizza. Cleanup happens inside the session time.</p>
+          <p class="eb-note">This brief is compiled by the pipeline from the layers you just watched generate. Educators never see an OLM ID.</p>`
+      },
+
+      cad: {
+        brief: `CAD Missions. Self-paced 3D modeling series, ages 7+.
+
+Learners complete missions in Onshape, a professional browser-based
+CAD tool. Each mission gives a design specification: model a part with
+exact dimensions. Learners explore the tool, apply features like
+sketch, extrude, and fillet with precise parameters, and iterate until
+the part matches spec. Onshape measures the part's surface area and
+the learner checks the number against the mission's expected value.
+A match means the geometry is right.
+
+Self-directed pace. An educator is nearby, but missions are designed
+to be completed independently.
+
+Resources
+- www.onshape.com (each student needs an Onshape account)
+- www.cadmissions.com (educators and students use this to access
+  the missions or purchase the mission books)`,
+        bricks: [
+          ["routine.explore_tool","bc-routine"],["routine.apply_feature_with_parameters","bc-routine"],
+          ["routine.iterate_for_precision","bc-routine"],["routine.verify_with_measurement","bc-routine"],
+          ["routine.compare_to_spec","bc-routine"],["routine.reflect","bc-routine"],
+          ["artifact.cad_part_file","bc-artifact"],["artifact.measurement_log","bc-artifact"],
+          ["artifact.verification_record","bc-artifact"],
+          ["evidence.numeric_match","bc-evidence"],["evidence.artifact_presence","bc-evidence"],
+          ["evidence.routine_completion","bc-evidence"],
+          ["constraint.design_specification","bc-constraint"],["constraint.tool_limit","bc-constraint"],
+          ["constraint.self_direction","bc-constraint"],
+          ["hdd.precision_orientation","bc-hdd"],["hdd.persistence","bc-hdd"],["hdd.self_trust","bc-hdd"]
+        ],
+        coreMapping: `# Core Mapping generated by the OLM pipeline
+# Validated against canonical registry v1.1
+# Integration type: overlay on an externally-authored program
+
+program_id: program.cad_missions
+title: CAD Missions
+embedding_mode: standalone
+duration: self-paced (30–60 minutes per mission)
+age_range: 7+
+program_intent: >
+  Mission-based 3D modeling in professional CAD. Each mission supplies
+  a design specification; learners model the part, measure it, and
+  verify their result against the expected value. Correctness is
+  demonstrated by measurement rather than asserted by an adult.
+
+patterns: []   # mission structure is linear; no canonical pattern claimed
+
+routines:
+  - routine.explore_tool
+  - routine.apply_feature_with_parameters   # sketch, extrude, fillet
+  - routine.iterate_for_precision
+  - routine.verify_with_measurement         # surface-area check
+  - routine.compare_to_spec
+  - routine.reflect
+
+artifacts:
+  - id: artifact.cad_part_file
+    durability: durable
+  - id: artifact.measurement_log
+    durability: durable
+  - id: artifact.verification_record
+    durability: durable
+
+evidence:
+  - evidence.numeric_match        # measured value equals spec value
+  - evidence.artifact_presence
+  - evidence.routine_completion
+
+constraints:
+  - constraint.design_specification   # exact target dimensions
+  - constraint.tool_limit             # Onshape feature set per mission
+  - constraint.self_direction         # missions completed independently
+
+hdd_alignment:   # design intent only, never claimed as outcomes
+  - hdd.precision_orientation
+  - hdd.persistence
+  - hdd.self_trust
+
+notes: >
+  evidence.numeric_match is the strongest evidence signal in the
+  reference library: the artifact verifies itself. One Core Mapping
+  covers the full mission catalog; missions vary in content, not
+  structure.`,
+        playbook: `# Playbook generated by the OLM pipeline
+# Delivery model. References the Core Mapping; redefines nothing.
+
+playbook_id: playbook.self_paced_cad_missions
+title: Self-Paced CAD Mission Series
+program_id_supported: program.cad_missions
+delivery_duration: self-paced (30–60 minutes per mission)
+provisional: false
+
+typical_flow:
+  - Learner selects the next mission and reads its design
+    specification before touching the tool.
+  - Independent modeling time, where the learner explores, applies
+    features, and iterates toward the spec dimensions.
+  - Verification: the learner measures the part in-tool and
+    compares the value against the mission's expected result.
+  - Short logged reflection, then either a retry for precision or
+    progression to the next mission.
+
+roles_and_responsibilities:
+  educator:
+    - Maintain the mission sequence and unlock progression
+    - Coach precision habits without taking the mouse
+    - Spot-check verification records weekly
+  guide:
+    - Help with account and tool access issues
+    - Encourage stuck learners toward the next small step
+
+materials_equipment:
+  - Laptop or desktop per learner (Chromebook sufficient)
+  - Onshape education accounts (www.onshape.com)
+  - Mission cards or mission books from www.cadmissions.com
+
+space_setup: >
+  Individual workstations; a shared screen available for occasional
+  feature demonstrations. No fixed seating; learners work at their
+  own mission, not the group's.
+
+evidence_in_practice:
+  - artifact_id: artifact.cad_part_file
+    how_collected: Saved automatically in the learner's Onshape account.
+  - artifact_id: artifact.measurement_log
+    how_collected: Learner records the measured value on the mission card.
+  - artifact_id: artifact.verification_record
+    how_collected: Match/no-match against spec, logged per mission attempt.
+
+observable_routines:
+  - routine.apply_feature_with_parameters
+  - routine.verify_with_measurement
+  - routine.compare_to_spec
+
+rituals_referenced: []
+
+adaptation_notes: >
+  Works one-on-one, in open studio hours, or as a station within a
+  larger camp. Younger learners may need the first mission paired;
+  independence is the design goal, not the entry requirement.
+
+notes: >
+  Delivery model is reusable for any self-paced, specification-
+  verified technical series.`,
+        ebrief: `
+          <p class="eb-doc-tag">Educator Brief</p>
+          <h3 class="eb-title">CAD Missions</h3>
+          <p class="eb-meta">Self-paced series · Ages 7+ · Independent missions, educator nearby</p>
+
+          <h4>What to Expect</h4>
+          <p>Quiet, focused, and self-directed. Each learner works through their own mission at their own pace. Protect that independence. The missions are designed to teach; your role is to coach.</p>
+
+          <h4>Before the Session</h4>
+          <ul>
+            <li>Confirm every learner can log into Onshape (accounts at onshape.com)</li>
+            <li>Have the mission sequence ready from cadmissions.com</li>
+            <li>Review which mission each returning learner is on</li>
+          </ul>
+
+          <h4>Materials</h4>
+          <ul>
+            <li>One computer per learner</li>
+            <li>Mission cards or mission books from cadmissions.com</li>
+            <li>Verification log sheets</li>
+          </ul>
+
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="https://www.onshape.com" target="_blank" rel="noopener">onshape.com</a>: each student needs an account before the first mission</li>
+            <li><a href="https://www.cadmissions.com" target="_blank" rel="noopener">cadmissions.com</a>: mission access and mission books, for educators and students</li>
+          </ul>
+
+          <h4>Key Prompts</h4>
+          <ul>
+            <li>"What does the spec ask for, exactly?"</li>
+            <li>"What did the measurement tell you?"</li>
+            <li>"Which feature would get you closer?"</li>
+          </ul>
+
+          <h4>Common Pitfalls</h4>
+          <ul>
+            <li>Taking the mouse. Coach with words, not hands.</li>
+            <li>Letting a learner skip verification. The measured match is the point of the mission.</li>
+            <li>Racing through missions. Remind learners that precision matters more than speed.</li>
+          </ul>
+
+          <h4>End of Session</h4>
+          <p>Each learner logs where they stopped and their last measurement. It takes two minutes and lets the next session start without setup.</p>
+          <p class="eb-note">This brief is compiled by the pipeline from the layers you just watched generate. Educators never see an OLM ID.</p>`
+      },
+
+      popcorn: {
+        brief: `Popcorn Factory. Week-long camp, ages 7–17, teams of ~6.
+
+Teams design, build, and pitch a popcorn product venture across four
+days. Day one frames the challenge: teams interpret the problem, set
+up a kanban board, and build a first prototype. Days two and three are
+for iteration: flavor development, branding, costing, design reviews
+between teams. Day four is Demo Day: final prototype, public pitch to
+families, and a team retrospective.
+
+Three teams of six, one educator plus three guides. Each team works
+within a materials budget. Food-safety rules apply throughout.`,
+        bricks: [
+          ["pattern.project_planning","bc-pattern"],["pattern.question_board","bc-pattern"],
+          ["pattern.prototype_cycle","bc-pattern"],["pattern.design_review","bc-pattern"],
+          ["pattern.capstone_pitch","bc-pattern"],["pattern.retrospective","bc-pattern"],
+          ["routine.problem_interpretation","bc-routine"],["routine.design_planning","bc-routine"],
+          ["routine.kanban_workflow","bc-routine"],["routine.prototype_iteration","bc-routine"],
+          ["routine.peer_feedback","bc-routine"],["routine.presentation_pitch","bc-routine"],
+          ["routine.retrospective","bc-routine"],
+          ["artifact.design_brief","bc-artifact"],["artifact.kanban_board","bc-artifact"],
+          ["artifact.prototype","bc-artifact"],["artifact.pitch_deck","bc-artifact"],
+          ["artifact.reflection_log","bc-artifact"],
+          ["evidence.artifact_presence","bc-evidence"],["evidence.rubric_observation","bc-evidence"],
+          ["evidence.short_answer_reflection","bc-evidence"],
+          ["constraint.time_limit","bc-constraint"],["constraint.team_size","bc-constraint"],
+          ["constraint.budget_cap","bc-constraint"],["constraint.safety_requirement","bc-constraint"],
+          ["hdd.collaboration","bc-hdd"],["hdd.agency","bc-hdd"],["hdd.persistence","bc-hdd"]
+        ],
+        coreMapping: `# Core Mapping generated by the OLM pipeline
+# Validated against canonical registry v1.1
+# Primary reference implementation of the OLM library
+
+program_id: program.popcorn_factory
+title: Popcorn Factory
+embedding_mode: standalone
+duration: 4 days
+age_range: 7–17
+program_intent: >
+  Teams experience the full lifecycle of launching a product venture:
+  interpreting a challenge, planning work, iterating prototypes
+  through structured reviews, and pitching publicly on Demo Day.
+
+patterns:
+  - pattern.project_planning
+  - pattern.question_board
+  - pattern.prototype_cycle
+  - pattern.design_review
+  - pattern.capstone_pitch     # final-phase only
+  - pattern.retrospective      # final-phase only
+
+routines:
+  - routine.problem_interpretation
+  - routine.design_planning
+  - routine.kanban_workflow
+  - routine.prototype_iteration
+  - routine.peer_feedback
+  - routine.presentation_pitch
+  - routine.retrospective
+
+artifacts:
+  - id: artifact.design_brief
+    durability: durable
+  - id: artifact.kanban_board
+    durability: durable
+  - id: artifact.prototype
+    durability: perishable     # it's popcorn
+  - id: artifact.pitch_deck
+    durability: durable
+  - id: artifact.reflection_log
+    durability: durable
+
+evidence:
+  - evidence.artifact_presence
+  - evidence.rubric_observation       # pitch rubric on Demo Day
+  - evidence.short_answer_reflection
+
+constraints:
+  - constraint.time_limit
+  - constraint.team_size              # teams of ~6
+  - constraint.budget_cap             # materials budget per team
+  - constraint.safety_requirement     # food handling
+
+hdd_alignment:   # design intent only, never claimed as outcomes
+  - hdd.collaboration
+  - hdd.agency
+  - hdd.persistence
+
+notes: >
+  Capstone patterns (capstone_pitch, retrospective) belong to the
+  final phase only; earlier days run prototype_cycle and
+  design_review. No skills are claimed directly; skills are derived
+  downstream from routines, artifacts, and evidence.`,
+        playbook: `# Playbook generated by the OLM pipeline
+# Delivery model. References the Core Mapping; redefines nothing.
+
+playbook_id: playbook.venture_week_camp
+title: Venture Week Camp
+program_id_supported: program.popcorn_factory
+delivery_duration: 4 days
+provisional: false
+
+typical_flow:
+  - Framing day: challenge introduction, problem interpretation,
+    team formation, kanban setup, and a deliberately rough first
+    prototype before the day ends.
+  - Iteration days: morning stand-ups, prototype cycles, breakout
+    workshops on branding and costing, and cross-team design
+    reviews each afternoon.
+  - Convergence: teams lock their product, build the pitch, and
+    rehearse with guide feedback.
+  - Demo Day: public pitches to families, tasting, and a team
+    retrospective to close the week.
+
+roles_and_responsibilities:
+  educator:
+    - Own the weekly arc and protect iteration time
+    - Run design reviews and the Demo Day rubric
+    - Keep kanban boards honest and visible
+  guide:
+    - Coordinate one team each through daily cycles
+    - Supervise safe food handling at all times
+    - Capture reflection moments the educator can't see
+
+materials_equipment:
+  - Popcorn kernels, oil, flavorings within budget caps
+  - Kanban boards (one per team), sticky notes
+  - Branding supplies: paper, markers, packaging blanks
+  - Pitch space with projector for Demo Day
+
+space_setup: >
+  One zone per team plus a shared materials store and a separated
+  food-prep area. Demo Day reconfigures the room toward a stage.
+
+evidence_in_practice:
+  - artifact_id: artifact.design_brief
+    how_collected: Completed by each team on framing day.
+  - artifact_id: artifact.kanban_board
+    how_collected: Photographed at the end of each day.
+  - artifact_id: artifact.prototype
+    how_collected: Tasted and photographed at each design review.
+  - artifact_id: artifact.pitch_deck
+    how_collected: Saved before Demo Day; presented publicly.
+  - artifact_id: artifact.reflection_log
+    how_collected: Short entries after each design review and at close.
+
+observable_routines:
+  - routine.kanban_workflow
+  - routine.prototype_iteration
+  - routine.peer_feedback
+  - routine.presentation_pitch
+
+rituals_referenced:
+  - Morning Circle
+  - Kanban Review
+  - Demo Day
+  - Closing Circle
+
+adaptation_notes: >
+  Scales 2 to 4 teams with one guide per team. For younger-skewing
+  groups, shorten pitch length and pre-build the deck template; for
+  older groups, deepen the costing workshop.
+
+notes: >
+  The delivery model generalizes to any product-venture week with a
+  perishable or physical prototype.`,
+        ebrief: `
+          <p class="eb-doc-tag">Educator Brief</p>
+          <h3 class="eb-title">Popcorn Factory</h3>
+          <p class="eb-meta">4-day camp · Ages 7–17 · 3 teams of ~6 · 1 educator + 3 guides</p>
+
+          <h4>What to Expect</h4>
+          <p>A full venture arc in four days. Day one ends with a rough prototype on purpose. The week builds toward Demo Day, when families watch teams pitch what they built.</p>
+
+          <h4>Before the Session</h4>
+          <ul>
+            <li>Stock kernels, oil, and flavorings within each team's budget</li>
+            <li>Set up one kanban board per team zone</li>
+            <li>Brief guides on their team assignments and the daily rhythm</li>
+            <li>Confirm Demo Day invitations went to families</li>
+          </ul>
+
+          <h4>Materials</h4>
+          <ul>
+            <li>Popcorn supplies and flavor stations</li>
+            <li>Kanban boards, sticky notes, timers</li>
+            <li>Branding and packaging supplies</li>
+            <li>Projector and pitch space for Demo Day</li>
+          </ul>
+
+          <h4>Key Prompts</h4>
+          <ul>
+            <li>"Who is this product for?"</li>
+            <li>"What did the last taste test tell you?"</li>
+            <li>"What's on the board that nobody's doing?"</li>
+          </ul>
+
+          <h4>Common Pitfalls</h4>
+          <ul>
+            <li>Teams polishing one idea instead of iterating. Push for version two by lunch.</li>
+            <li>Kanban boards going stale by day two. Review them in morning circle each day.</li>
+            <li>Guides doing the work during crunch. Keep coaching hands-off, especially before Demo Day.</li>
+          </ul>
+
+          <h4>End of Session</h4>
+          <p>Each day closes with a circle and a one-line reflection per learner. The week closes with a team retrospective after the pitches. Protect time for it.</p>
+          <p class="eb-note">This brief is compiled by the pipeline from the layers you just watched generate. Educators never see an OLM ID.</p>`
+      }
+    };
+
+    // ── State and elements ──
+    let selected = null;
+    let running = false;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const $ = (id) => document.getElementById(id);
+    const pickCards = document.querySelectorAll('.pick-card');
+    const stages = document.querySelectorAll('.stage');
+    const tabs = { cm: $('tab-cm'), pb: $('tab-pb'), eb: $('tab-eb') };
+    const panes = { cm: $('pane-cm'), pb: $('pane-pb'), eb: $('pane-eb') };
+
+    // ── Program selection ──
+    pickCards.forEach(card => {
+      card.addEventListener('click', () => {
+        if (running) return;
+        selected = card.dataset.program;
+        pickCards.forEach(c => c.setAttribute('aria-pressed', String(c === card)));
+        $('brief-text').textContent = PROGRAMS[selected].brief;
+        $('step2-section').hidden = false;
+        resetOutput();
+        $('step2-section').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+      });
+    });
+
+    function resetOutput() {
+      $('pipeline-section').hidden = true;
+      $('out-section').hidden = true;
+      $('pipeline').classList.remove('active');
+      stages.forEach(s => s.classList.remove('running', 'done'));
+      $('assembly').innerHTML = '';
+      Object.values(tabs).forEach(t => {
+        t.disabled = true;
+        t.setAttribute('aria-selected', 'false');
+        t.querySelector('.tab-check').hidden = true;
+      });
+      Object.values(panes).forEach(p => p.classList.remove('active'));
+      $('run-btn').disabled = false;
+    }
+
+    // ── Tab switching ──
+    function showTab(key) {
+      Object.entries(tabs).forEach(([k, t]) => t.setAttribute('aria-selected', String(k === key)));
+      Object.entries(panes).forEach(([k, p]) => p.classList.toggle('active', k === key));
+    }
+    tabs.cm.addEventListener('click', () => !tabs.cm.disabled && showTab('cm'));
+    tabs.pb.addEventListener('click', () => !tabs.pb.disabled && showTab('pb'));
+    tabs.eb.addEventListener('click', () => !tabs.eb.disabled && showTab('eb'));
+
+    // ── Helpers ──
+    const wait = (ms) => new Promise(r => setTimeout(r, reduceMotion ? 0 : ms));
+
+    function setStage(i, state) {
+      stages.forEach((s, idx) => {
+        if (idx < i) { s.classList.add('done'); s.classList.remove('running'); }
+        else if (idx === i) { s.classList.add(state); if (state === 'done') s.classList.remove('running'); }
+      });
+    }
+
+    async function assembleBricks(program) {
+      const board = $('assembly');
+      for (const [id, cls] of program.bricks) {
+        const brick = document.createElement('span');
+        brick.className = 'brick ' + cls;
+        const short = id.split('.')[1];
+        const studCount = cls === 'bc-pattern' ? 4 : cls === 'bc-artifact' ? 3 : cls === 'bc-evidence' || cls === 'bc-hdd' ? 1 : 2;
+        brick.innerHTML = '<span class="studs">' + '<i></i>'.repeat(studCount) + '</span>' + short;
+        board.appendChild(brick);
+        // force reflow so the snap transition runs
+        void brick.offsetWidth;
+        brick.classList.add('snapped');
+        await wait(110);
+      }
+    }
+
+    function typeYaml(el, text) {
+      return new Promise(resolve => {
+        el.textContent = '';
+        if (reduceMotion) { el.textContent = text; resolve(); return; }
+        const lines = text.split('\n');
+        let i = 0;
+        const tick = () => {
+          // reveal 2 lines per frame for pace
+          el.textContent += (i > 0 ? '\n' : '') + lines.slice(i, i + 2).join('\n');
+          i += 2;
+          if (i < lines.length) { setTimeout(tick, 36); }
+          else { resolve(); }
+        };
+        tick();
+      });
+    }
+
+    function unlockTab(key) {
+      tabs[key].disabled = false;
+      tabs[key].querySelector('.tab-check').hidden = false;
+    }
+
+    // ── The run ──
+    $('run-btn').addEventListener('click', async () => {
+      if (!selected || running) return;
+      running = true;
+      $('run-btn').disabled = true;
+      const program = PROGRAMS[selected];
+
+      $('pipeline-section').hidden = false;
+      $('pipeline').classList.add('active');
+      $('pipeline-section').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+
+      setStage(0, 'running'); await wait(900); setStage(0, 'done');
+      setStage(1, 'running'); await wait(1100); setStage(1, 'done');
+
+      // Composing Core Mapping: bricks assemble
+      setStage(2, 'running');
+      await assembleBricks(program);
+      setStage(2, 'done');
+
+      // Core Mapping output
+      $('out-section').hidden = false;
+      setStage(3, 'running');
+      unlockTab('cm'); showTab('cm');
+      $('out-section').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest' });
+      await typeYaml($('yaml-cm'), program.coreMapping);
+      setStage(3, 'done');
+
+      // Playbook
+      setStage(4, 'running'); await wait(800); setStage(4, 'done');
+      setStage(5, 'running');
+      unlockTab('pb'); showTab('pb');
+      await typeYaml($('yaml-pb'), program.playbook);
+      setStage(5, 'done');
+
+      // Educator Brief
+      setStage(6, 'running'); await wait(900); setStage(6, 'done');
+      $('ebrief').innerHTML = program.ebrief;
+      unlockTab('eb'); showTab('eb');
+      setStage(7, 'done');
+      stages[7].classList.add('done');
+
+      running = false;
+    });
+
+    // ── Restart ──
+    $('restart-btn').addEventListener('click', () => {
+      if (running) return;
+      resetOutput();
+      selected = null;
+      pickCards.forEach(c => c.setAttribute('aria-pressed', 'false'));
+      $('step2-section').hidden = true;
+      $('pick-grid').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    });
+  </script>
+</body>
+</html>

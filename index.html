@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Open Learning Map — A common language for learning</title>
-  <meta name="description" content="OLM is a structural framework that makes educational programs portable, inspectable, and reproducible — designed for both humans and AI systems." />
+  <title>Open Learning Map | A common language for learning</title>
+  <meta name="description" content="OLM is a structural framework that makes educational programs portable, inspectable, and reproducible. Designed for both humans and AI systems." />
   <link rel="stylesheet" href="styles.css" />
   <style>
-    /* Prompt builder — additions to styles.css */
+    /* Prompt builder additions to styles.css */
     #prompt-output {
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-size: 0.85em;
@@ -73,7 +73,7 @@
     gtag('config', 'G-Q7HHX62PSZ');
   </script>
 
-  <!-- Structured data — schema.org JSON-LD -->
+  <!-- Structured data: schema.org JSON-LD -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -161,11 +161,12 @@
     <!-- TOPBAR -->
     <div class="topbar">
       <a class="brand" href="/" aria-label="Open Learning Map">
-        <img class="logo" src="assets/olm_logo.png" alt="olm — A common language for learning" />
+        <img class="logo" src="assets/olm_logo.png" alt="olm: A common language for learning" />
       </a>
       <nav class="nav" aria-label="Primary">
         <a href="#framework">Framework</a>
         <a href="#programs">Programs</a>
+        <a href="/demo/">Demo</a>
         <a href="#ai">AI</a>
         <a href="#contribute">Contribute</a>
         <a href="https://github.com/Meta-Humans/olm" target="_blank" rel="noopener" class="nav-github">GitHub ↗</a>
@@ -178,18 +179,19 @@
       <header class="header">
         <p class="hero-problem">
           Most educational programs live in a facilitator's head or a PDF no one reads.
-          When they scale — to new sites, new staff, new AI tools — they degrade.
+          When they scale to new sites, new staff, and new AI tools, they degrade.
         </p>
         <p class="hero-answer">
-          OLM is a structural layer that makes programs <strong>portable</strong>, <strong>inspectable</strong>, and <strong>reproducible</strong> — without replacing the curriculum.
+          OLM is a structural layer that makes programs <strong>portable</strong>, <strong>inspectable</strong>, and <strong>reproducible</strong>, without replacing the curriculum.
         </p>
         <div class="hero-ctas">
-          <a href="#framework" class="cta-primary">Browse the framework</a>
+          <a href="/demo/" class="cta-primary">See the pipeline in action</a>
+          <a href="#framework" class="cta-secondary">Browse the framework</a>
           <a href="#programs" class="cta-secondary">See reference programs</a>
           <a href="#contribute" class="cta-secondary">Contribute a program</a>
         </div>
         <div class="badges">
-          <span class="badge">v1.0 — May 2026</span>
+          <span class="badge">v1.0, May 2026</span>
           <span class="badge">Open framework</span>
           <span class="badge">Built by Meta Humans</span>
         </div>
@@ -201,7 +203,7 @@
         <section id="framework">
           <h2>What OLM is</h2>
           <p>
-            OLM is not a curriculum. It is a <strong>governed vocabulary and structural layer</strong> that any program can be expressed in — making the structure of learning inspectable alongside the content, without changing the content.
+            OLM is not a curriculum. It is a <strong>governed vocabulary and structural layer</strong> that any program can be expressed in. It makes the structure of learning inspectable alongside the content, without changing the content.
           </p>
           <p>
             Every program expressed in OLM consists of the same kinds of building blocks: routines (what learners do), artifacts (what they produce), evidence (what is observed), constraints (what limits the work), and patterns (named clusters of blocks that recur). A program is a specific, versioned composition of these blocks.
@@ -213,32 +215,32 @@
           <div class="layers">
             <div class="layer layer-cm">
               <div class="layer-label">Core Mapping</div>
-              <div class="layer-desc">The learning architecture — programs, patterns, routines, artifacts, evidence, constraints. Delivery-agnostic. This is what OLM governs.</div>
+              <div class="layer-desc">The learning architecture: programs, patterns, routines, artifacts, evidence, constraints. Delivery-agnostic. This is the layer OLM governs.</div>
             </div>
             <div class="layer-arrow">↓</div>
             <div class="layer layer-pb">
               <div class="layer-label">Playbook</div>
-              <div class="layer-desc">How the program is typically delivered — pedagogy, group configuration, educator stance, adaptation rules.</div>
+              <div class="layer-desc">How the program is typically delivered: pedagogy, group configuration, educator stance, adaptation rules.</div>
             </div>
             <div class="layer-arrow">↓</div>
             <div class="layer layer-rb">
               <div class="layer-label">Runbook</div>
-              <div class="layer-desc">The executable session flow — timed steps, facilitator actions, participant actions. Internal pipeline stage.</div>
+              <div class="layer-desc">The executable session flow: timed steps, facilitator actions, participant actions. Internal pipeline stage.</div>
             </div>
             <div class="layer-arrow">↓</div>
             <div class="layer layer-eb">
               <div class="layer-label">Educator Brief</div>
-              <div class="layer-desc">What educators see — preparation checklist, materials, session flow, key prompts, pitfalls. No OLM IDs.</div>
+              <div class="layer-desc">What educators see: preparation checklist, materials, session flow, key prompts, pitfalls. No OLM IDs.</div>
             </div>
             <div class="layer-arrow">↓</div>
             <div class="layer layer-parent">
               <div class="layer-label">Parent Brief</div>
-              <div class="layer-desc">What families see — accessible description, what kids will do, why it's valuable.</div>
+              <div class="layer-desc">What families see: an accessible description, what kids will do, why it's valuable.</div>
             </div>
           </div>
 
           <p class="small-note">
-            A hub buyer can inspect the Core Mapping. An educator reads the Educator Brief. A parent reads the Parent Brief. All three documents derive from the same structural source.
+            A hub buyer can inspect the Core Mapping. An educator reads the Educator Brief. A parent reads the Parent Brief. All three documents derive from the same structural source. <a href="/demo/">Watch the pipeline generate all three layers from a raw brief →</a>
           </p>
         </section>
 
@@ -246,7 +248,7 @@
         <section id="blocks">
           <h2>The canonical elements</h2>
           <p>
-            OLM governs a registry of <strong>canonical elements</strong> — the only valid building blocks for any program mapping. No generated packet may reference an ID not in the registry. This is what makes OLM machine-readable and validator-enforced.
+            OLM governs a registry of <strong>canonical elements</strong>, the only valid building blocks for any program mapping. No generated packet may reference an ID not in the registry. This is what makes OLM machine-readable and validator-enforced.
           </p>
 
           <div class="registry-stats">
@@ -308,7 +310,7 @@
         <section id="programs">
           <h2>Reference programs</h2>
           <p>
-            Four programs mapped end-to-end — selected to show that OLM handles real variety across domain, age range, format, and authorship type.
+            Four programs mapped end-to-end, selected to show that OLM handles real variety across domain, age range, format, and authorship type.
           </p>
 
           <div class="program-grid">
@@ -320,7 +322,7 @@
               </div>
               <h3>Popcorn Factory</h3>
               <p class="program-ages">Ages 7–17 · Week-long camp</p>
-              <p>Teams design, build, and pitch a popcorn product venture. The primary reference implementation — shows OLM from the ground up across a full week-long program.</p>
+              <p>Teams design, build, and pitch a popcorn product venture. The primary reference implementation. It shows OLM applied from the ground up across a full week-long program.</p>
               <div class="program-patterns">
                 <code>pattern.project_planning</code>
                 <code>pattern.prototype_cycle</code>
@@ -336,7 +338,7 @@
               </div>
               <h3>Homemade Pizza</h3>
               <p class="program-ages">All ages · 60-minute workshop</p>
-              <p>Learners explore the history of pizza, then make one. Demonstrates OLM at its simplest — a single-session program with one perishable artifact and a clean inquiry-to-application arc.</p>
+              <p>Learners explore the history of pizza, then make one. Demonstrates OLM at its simplest: a single-session program with one perishable artifact and a clean inquiry-to-application arc.</p>
               <div class="program-patterns">
                 <code>routine.new_material</code>
                 <code>routine.hands_on_activity</code>
@@ -364,11 +366,11 @@
             <div class="program-card">
               <div class="program-header">
                 <span class="program-domain domain-science">Science Inquiry</span>
-                <span class="program-type">Integrated — OpenSciEd</span>
+                <span class="program-type">Integrated: OpenSciEd</span>
               </div>
-              <h3>OpenSciEd Unit 6.1 — Light &amp; Matter</h3>
+              <h3>OpenSciEd Unit 6.1: Light &amp; Matter</h3>
               <p class="program-ages">Ages 11–12 · 6-week unit</p>
-              <p>OLM as a translation layer over a widely-used NSF-funded curriculum. OpenSciEd's five "routines" become OLM patterns — naming the difference is what makes the translation possible.</p>
+              <p>OLM as a translation layer over a widely-used NSF-funded curriculum. OpenSciEd's five "routines" become OLM patterns. Naming the difference is what makes the translation possible.</p>
               <div class="program-patterns">
                 <code>pattern.phenomenon_anchor</code>
                 <code>pattern.investigation_cycle</code>
@@ -388,7 +390,7 @@
               </thead>
               <tbody>
                 <tr><td>Anchoring Phenomenon Routine</td><td><code>pattern.phenomenon_anchor</code></td></tr>
-                <tr><td>Navigation Routine</td><td>Ritual — <em>Storyline Navigation</em> (no evidence produced)</td></tr>
+                <tr><td>Navigation Routine</td><td>Ritual: <em>Storyline Navigation</em> (no evidence produced)</td></tr>
                 <tr><td>Investigation Routine</td><td><code>pattern.investigation_cycle</code></td></tr>
                 <tr><td>Putting the Pieces Together Routine</td><td><code>pattern.consensus_model</code></td></tr>
                 <tr><td>Driving Question Board</td><td><code>artifact.question_set</code> (existing canonical ID)</td></tr>
@@ -415,12 +417,12 @@
             </div>
             <div class="ai-resource">
               <div class="ai-resource-title">Context bundle</div>
-              <div class="ai-resource-desc">Constitution, canonical registry, generation rules, and worked examples — everything an LLM needs in one fetch.</div>
+              <div class="ai-resource-desc">Constitution, canonical registry, generation rules, and worked examples. Everything an LLM needs in one fetch.</div>
               <a href="/ai/olm_context_bundle_latest.md" class="ai-resource-link">Download olm_context_bundle_latest.md</a>
             </div>
             <div class="ai-resource">
               <div class="ai-resource-title">Canonical registry</div>
-              <div class="ai-resource-desc">Machine-readable YAML. The authoritative source for ID validation — for humans, AI agents, and automated scripts.</div>
+              <div class="ai-resource-desc">Machine-readable YAML. The authoritative source for ID validation, for humans, AI agents, and automated scripts.</div>
               <a href="/ai/canonical_registry_latest.yaml" class="ai-resource-link">Download canonical_registry_latest.yaml</a>
             </div>
           </div>
@@ -433,7 +435,7 @@
         <section id="contribute">
           <h2>Contribute</h2>
           <p>
-            OLM grows through practitioners mapping the programs they actually run. The most valuable contribution is a Core Mapping — a structural description of a real program expressed in canonical OLM vocabulary.
+            OLM grows through practitioners mapping the programs they actually run. The most valuable contribution is a Core Mapping: a structural description of a real program expressed in canonical OLM vocabulary.
           </p>
 
           <div class="contrib-paths">
@@ -441,7 +443,7 @@
               <div class="contrib-icon">①</div>
               <div>
                 <strong>Apply OLM to your program</strong>
-                <p>Paste your brief below to build a complete prompt — the canonical registry, layer rules, and your brief — ready to paste into Claude, ChatGPT, or any capable LLM. Generate a <strong>Core Mapping</strong> for the learning architecture, or a <strong>Playbook</strong> for the delivery model. Your AI tool, your output, framework-compliant.</p>
+                <p>Paste your brief below to build a complete prompt (the canonical registry, layer rules, and your brief) ready to paste into Claude, ChatGPT, or any capable LLM. Generate a <strong>Core Mapping</strong> for the learning architecture, or a <strong>Playbook</strong> for the delivery model. Your AI tool, your output, framework-compliant.</p>
               </div>
             </div>
             <div class="contrib-path">
@@ -512,13 +514,13 @@
   </main>
 
   <script>
-    // Prompt builder — assembles the OLM system prompt + a task wrapper + the user's brief.
+    // Prompt builder. Assembles the OLM system prompt + a task wrapper + the user's brief.
     // The system prompt is fetched once from /ai/olm_system_prompt_latest.md and cached.
-    // Nothing is sent to a server — the prompt is assembled entirely in the browser.
+    // Nothing is sent to a server. The prompt is assembled entirely in the browser.
     //
-    // Two output modes — both within OLM framework scope:
-    //   core_mapping — YAML Core Mapping (learning architecture)
-    //   playbook     — YAML Playbook (delivery model)
+    // Two output modes, both within OLM framework scope:
+    //   core_mapping: YAML Core Mapping (learning architecture)
+    //   playbook:     YAML Playbook (delivery model)
     //
     // Cache-busting: bump SYSTEM_PROMPT_VERSION when /ai/olm_system_prompt_latest.md changes.
     // The browser caches per-URL; a new version parameter forces a fresh fetch automatically.
@@ -554,7 +556,7 @@
       '',
       '## What a Playbook is',
       '',
-      'A Playbook defines the **delivery model** for one or more programs that share a Core Mapping family. It describes how the program is typically delivered — pedagogy, group configuration, educator stance, materials, space setup, adaptation rules — without redefining the canonical routines, artifacts, or evidence declared in the Core Mapping.',
+      'A Playbook defines the **delivery model** for one or more programs that share a Core Mapping family. It describes how the program is typically delivered (pedagogy, group configuration, educator stance, materials, space setup, adaptation rules) without redefining the canonical routines, artifacts, or evidence declared in the Core Mapping.',
       '',
       'A Playbook is not a session script. It is delivery-layer guidance that applies across many runs of the same program by different educators in different contexts.',
       '',
@@ -566,24 +568,24 @@
       '',
       'Produce a YAML document with the following fields, in this order:',
       '',
-      '- `playbook_id` — slug, lowercase, underscored, format: `playbook.snake_case_name`',
-      '- `title` — short descriptive title',
-      '- `program_id_supported` — one program ID or a list of program IDs from the same family',
-      '- `delivery_duration` — must match the Core Mapping `typical_duration` of the supported program(s)',
-      '- `provisional` — boolean. `true` if this is a draft for review; `false` only after acceptance into the canonical library',
-      '- `typical_flow` — 3 to 5 high-level phase descriptions. Each phase is a short prose description of what happens in that part of the delivery. NOT a step-by-step script. NOT timed minute-by-minute. NOT mapped one-to-one to routines.',
-      '- `roles_and_responsibilities` — object with two arrays:',
-      '    - `educator` — what the lead educator is responsible for',
-      '    - `guide` — what supporting staff (if any) are responsible for. Use an empty array `[]` if the program is single-educator.',
-      '- `materials_equipment` — bulleted list of physical or digital materials needed',
-      '- `space_setup` — short description of the space configuration',
-      '- `evidence_in_practice` — list of objects, one per artifact declared in the Core Mapping. Each object has:',
-      '    - `artifact_id` — must exactly match an artifact ID from the Core Mapping',
-      '    - `how_collected` — plain-language description of how the artifact is captured during delivery',
-      '- `observable_routines` — list of routine IDs from the Core Mapping that are visibly observable in delivery. Must be a subset of the routines declared in the Core Mapping. Do not add new routines.',
-      '- `rituals_referenced` — list of named OLM Ritual Library ritual names (e.g., Morning Circle, Closing Circle, Demo Day), or an empty array `[]`. Free-text descriptions of techniques are NOT valid entries.',
-      '- `adaptation_notes` — short prose on how the delivery adapts to common context variations (age range, group size, time constraints)',
-      '- `notes` — any framework gaps, ambiguities in the brief, or assumptions made',
+      '- `playbook_id`: slug, lowercase, underscored, format: `playbook.snake_case_name`',
+      '- `title`: short descriptive title',
+      '- `program_id_supported`: one program ID or a list of program IDs from the same family',
+      '- `delivery_duration`: must match the Core Mapping `typical_duration` of the supported program(s)',
+      '- `provisional`: boolean. `true` if this is a draft for review; `false` only after acceptance into the canonical library',
+      '- `typical_flow`: 3 to 5 high-level phase descriptions. Each phase is a short prose description of what happens in that part of the delivery. NOT a step-by-step script. NOT timed minute-by-minute. NOT mapped one-to-one to routines.',
+      '- `roles_and_responsibilities`: object with two arrays:',
+      '    - `educator`: what the lead educator is responsible for',
+      '    - `guide`: what supporting staff (if any) are responsible for. Use an empty array `[]` if the program is single-educator.',
+      '- `materials_equipment`: bulleted list of physical or digital materials needed',
+      '- `space_setup`: short description of the space configuration',
+      '- `evidence_in_practice`: list of objects, one per artifact declared in the Core Mapping. Each object has:',
+      '    - `artifact_id`: must exactly match an artifact ID from the Core Mapping',
+      '    - `how_collected`: plain-language description of how the artifact is captured during delivery',
+      '- `observable_routines`: list of routine IDs from the Core Mapping that are visibly observable in delivery. Must be a subset of the routines declared in the Core Mapping. Do not add new routines.',
+      '- `rituals_referenced`: list of named OLM Ritual Library ritual names (e.g., Morning Circle, Closing Circle, Demo Day), or an empty array `[]`. Free-text descriptions of techniques are NOT valid entries.',
+      '- `adaptation_notes`: short prose on how the delivery adapts to common context variations (age range, group size, time constraints)',
+      '- `notes`: any framework gaps, ambiguities in the brief, or assumptions made',
       '',
       '## Strict rules',
       '',
@@ -594,7 +596,7 @@
       '- If the brief does not provide enough information for a field, write "to be confirmed" or note the gap in the `notes` field rather than inventing content.',
       '- If the program does not have a Core Mapping yet, note that in the `notes` field and generate the Playbook against a plausible inferred Core Mapping, marking `provisional: true`.',
       '',
-      'When you are satisfied with the Playbook, you can optionally share it back to the OLM library by opening an issue at https://github.com/Meta-Humans/olm/issues/new with the YAML pasted in. Submit Playbooks only when the delivery model is genuinely reusable by another organization without modification — org-specific Playbooks stay local.',
+      'When you are satisfied with the Playbook, you can optionally share it back to the OLM library by opening an issue at https://github.com/Meta-Humans/olm/issues/new with the YAML pasted in. Submit Playbooks only when the delivery model is genuinely reusable by another organization without modification; org-specific Playbooks stay local.',
       '',
       '---',
       '',
@@ -657,7 +659,7 @@
 
         const estTokens = Math.round(fullPrompt.length / 4);
         meta.hidden = false;
-        meta.textContent = cfg.label + ' prompt — ~' + estTokens.toLocaleString() + ' tokens. Produces ' + cfg.produces + '. Works best with Claude Sonnet, GPT-4o, or Gemini Pro. Nothing left your browser.';
+        meta.textContent = cfg.label + ' prompt, ~' + estTokens.toLocaleString() + ' tokens. Produces ' + cfg.produces + '. Works best with Claude Sonnet, GPT-4o, or Gemini Pro. Nothing left your browser.';
       } catch (e) {
         out.hidden  = true;
         acts.hidden = true;
